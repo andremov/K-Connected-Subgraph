@@ -62,33 +62,6 @@ public class Place {
 		return (this.x <= x && this.x+70 >= x && this.y <= y && this.y+70 >= y);
 	}
 	
-	public BufferedImage getImage() {
-		BufferedImage image = new BufferedImage(70, 70, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
-		
-		g.setColor(Color.black);
-		g.drawRect(0, 0, 69, 69);
-		
-		BufferedImage img;
-		if (Handler.hasPerson(id) && isBox()) {
-			img = Data.PLACE_BOTH;
-		} else if (Handler.hasPerson(id)) {
-			img = Data.PLACE_PERSON;
-		} else if (isBox()) {
-			img = Data.PLACE_PACKET;
-		} else {
-			img = Data.PLACE_EMPTY;
-		}
-			
-		g.drawImage(img,10,0,50,50,null);
-             
-		g.setColor(Color.black);
-		g.setFont(new Font("Arial",Font.PLAIN,fontSize));
-		g.drawString(this.name, fontX, 50+fontY);
-		
-		return image;
-	}
-
 	public boolean isLocated() {
 		return !(this.x == -200 && this.y == -200); 
 	}
