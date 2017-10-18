@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public abstract class Handler {
 	
-    static ArrayList<Place> places;
+    static ArrayList<Vertex> places;
     static ArrayList<Person> people;
     static int NUM_VERTEX;
             
@@ -115,7 +115,7 @@ public abstract class Handler {
             for (int boxID = 0; boxID < NUM_VERTEX; boxID++) {
                 if (places.get(boxID).isBox() && !places.get(boxID).isTaken()) {
                     for (int personID = 0; personID < people.size(); personID++) {
-                        Place personStation = places.get(people.get(personID).getLast());
+                        Vertex personStation = places.get(people.get(personID).getLast());
                         double thisCost = personStation.getCostTo(boxID);
                         if (thisCost < lowestCost || lowestCost == -1) {
                             lowestCost = thisCost;
@@ -127,7 +127,7 @@ public abstract class Handler {
             }
             
             Person thisPerson = people.get(lowestPersonID);
-            Place personStation = places.get(thisPerson.getLast());
+            Vertex personStation = places.get(thisPerson.getLast());
             Path path = personStation.getPathTo(lowestBoxID);
             places.get(lowestBoxID).takeBox();
             for (int i = 0; i < path.size(); i++) {
@@ -139,7 +139,7 @@ public abstract class Handler {
     }
     
     public static void bestConnection(int index) {
-        Place thisPlace = places.get(index);
+        Vertex thisPlace = places.get(index);
         if (thisPlace.isBox() && !thisPlace.isTaken()) {
             if (hasPerson(index)) {
                 thisPlace.takeBox();
@@ -147,111 +147,99 @@ public abstract class Handler {
         }
     }
     
-    public static boolean hasPerson(int id) {
-        boolean isThere = false;
-		
-        for (int i = 0; i < people.size(); i++) {
-            if (people.get(i).getCurrent() == id) {
-                isThere = true;
-            }
-        }
-		
-        return isThere;
+    private static int getInt() {
+	boolean acceptedValue = false;
+	int value = 0;
+	Scanner in = new Scanner(System.in);
+	while (!acceptedValue) {
+	    try {
+		value = in.nextInt();
+		acceptedValue = true;
+	    } catch (Exception e) { }
+	}
+	return value;
     }
-    
-	private static int getInt() {
-		boolean acceptedValue = false;
-		int value = 0;
-		Scanner in = new Scanner(System.in);
-		while (!acceptedValue) {
-			try {
-				value = in.nextInt();
-				acceptedValue = true;
-			} catch (Exception e) { }
+
+    public static void consoleInput() {
+	System.out.println("Digite numero de vertices.");
+	NUM_VERTEX = getInt();
+
+	createMatrix();
+	System.out.println("Digite numero de cajas a agregar.");
+	int numCajas = getInt();
+
+	while (numCajas <= 0 || numCajas >= NUM_VERTEX) {
+		System.out.println("Digite un numero valido.");
+		numCajas = getInt();
+	}
+
+	for (int i = 0; i < numCajas; i++) {
+		System.out.println("Donde desea agregar la caja "+(i+1)+"?");
+		System.out.println("Posibilidades:");
+		for (int j = 0; j < NUM_VERTEX; j++) {
+			if (!places.get(j).isBox()) {
+				System.out.println(j+": "+places.get(j).getName());
+			}
 		}
-		return value;
+		int newBox = getInt();
+
+		while (places.get(newBox).isBox() || newBox < 0 || newBox >= NUM_VERTEX) {
+			System.out.println("Digite un sitio valido.");
+			newBox = getInt();
+		}
+
+		places.get(newBox).setBox(true);
+		System.out.println("Se agregó la caja a "+places.get(newBox).getName()+".");
 	}
-	
-	public static void consoleInput() {
-			System.out.println("Digite numero de vertices.");
-			NUM_VERTEX = getInt();
-			
-			createMatrix();
-			System.out.println("Digite numero de cajas a agregar.");
-			int numCajas = getInt();
-			
-			while (numCajas <= 0 || numCajas >= NUM_VERTEX) {
-				System.out.println("Digite un numero valido.");
-				numCajas = getInt();
-			}
-			
-			for (int i = 0; i < numCajas; i++) {
-				System.out.println("Donde desea agregar la caja "+(i+1)+"?");
-				System.out.println("Posibilidades:");
-				for (int j = 0; j < NUM_VERTEX; j++) {
-					if (!places.get(j).isBox()) {
-						System.out.println(j+": "+places.get(j).getName());
-					}
-				}
-				int newBox = getInt();
-				
-				while (places.get(newBox).isBox() || newBox < 0 || newBox >= NUM_VERTEX) {
-					System.out.println("Digite un sitio valido.");
-					newBox = getInt();
-				}
-				
-				places.get(newBox).setBox(true);
-				System.out.println("Se agregó la caja a "+places.get(newBox).getName()+".");
-			}
-			
-			System.out.println("Digite numero de personas a agregar.");
-			int numPersonas = getInt();
-			
-			while (numPersonas <= 0 || numPersonas >= NUM_VERTEX) {
-				System.out.println("Digite un numero valido.");
-				numPersonas = getInt();
-			}
-			
-			for (int i = 0; i < numPersonas; i++) {
-				System.out.println("Donde desea agregar la persona "+(i+1)+"?");
-				for (int j = 0; j < NUM_VERTEX; j++) {
-					if (!hasPerson(j)) {
-						System.out.println(j+": "+places.get(j).getName());
-					}
-				}
-				int newPerson = getInt();
-				
-				while (hasPerson(newPerson) || newPerson < 0 || newPerson >= NUM_VERTEX) {
-					System.out.println("Digite un sitio valido.");
-					newPerson = getInt();
-				}
-				
-				people.add(new Person(newPerson));
-				System.out.println("Se agregó la persona a "+places.get(newPerson).getName()+".");
-			}
-			
-			
-			solve();
-			
-			double totalCost = 0;
-			for (int i = 0; i < people.size(); i++) {
-				String start = places.get(people.get(i).history.get(0)).getName();
-				double thisPersonCost = 0;
-				System.out.println("La persona "+(i+1)+" empezó en "+start+".");
-				for (int j = 1; j < people.get(i).history.size(); j++) {
-					int id = people.get(i).history.get(j);
-					String name = places.get(id).getName();
-					double cost = people.get(i).distances.get(j);
-					System.out.println("Se movió a "+name+", costando "+(cost/100)+".");
-					if (places.get(id).isBox()) {
-						System.out.println(name+" tiene una caja.");
-					}
-					thisPersonCost = thisPersonCost + cost;
-				}
-				System.out.println("Esta persona gastó "+(thisPersonCost/100)+".");
-				totalCost = totalCost+thisPersonCost;
-			}
-			System.out.println("Se gastó en total "+(totalCost/100)+".");
-			
+
+	System.out.println("Digite numero de personas a agregar.");
+	int numPersonas = getInt();
+
+	while (numPersonas <= 0 || numPersonas >= NUM_VERTEX) {
+		System.out.println("Digite un numero valido.");
+		numPersonas = getInt();
 	}
+
+	for (int i = 0; i < numPersonas; i++) {
+		System.out.println("Donde desea agregar la persona "+(i+1)+"?");
+		for (int j = 0; j < NUM_VERTEX; j++) {
+			if (!hasPerson(j)) {
+				System.out.println(j+": "+places.get(j).getName());
+			}
+		}
+		int newPerson = getInt();
+
+		while (hasPerson(newPerson) || newPerson < 0 || newPerson >= NUM_VERTEX) {
+			System.out.println("Digite un sitio valido.");
+			newPerson = getInt();
+		}
+
+		people.add(new Person(newPerson));
+		System.out.println("Se agregó la persona a "+places.get(newPerson).getName()+".");
+	}
+
+
+	solve();
+
+	double totalCost = 0;
+	for (int i = 0; i < people.size(); i++) {
+		String start = places.get(people.get(i).history.get(0)).getName();
+		double thisPersonCost = 0;
+		System.out.println("La persona "+(i+1)+" empezó en "+start+".");
+		for (int j = 1; j < people.get(i).history.size(); j++) {
+			int id = people.get(i).history.get(j);
+			String name = places.get(id).getName();
+			double cost = people.get(i).distances.get(j);
+			System.out.println("Se movió a "+name+", costando "+(cost/100)+".");
+			if (places.get(id).isBox()) {
+				System.out.println(name+" tiene una caja.");
+			}
+			thisPersonCost = thisPersonCost + cost;
+		}
+		System.out.println("Esta persona gastó "+(thisPersonCost/100)+".");
+		totalCost = totalCost+thisPersonCost;
+	}
+	System.out.println("Se gastó en total "+(totalCost/100)+".");
+
+    }
 }
