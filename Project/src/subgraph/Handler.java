@@ -184,10 +184,6 @@ public abstract class Handler {
 	}
 	
 	public static void consoleInput() {
-		
-		
-		try {
-//			Scanner in = new Scanner(System.in);
 			System.out.println("Digite numero de vertices.");
 			NUM_VERTEX = getInt();
 			
@@ -267,6 +263,6 @@ public abstract class Handler {
 				totalCost = totalCost+thisPersonCost;
 			}
 			System.out.println("Se gastó en total "+(totalCost/100)+".");
-		} catch (Exception e) { }
+			
 	}
 }
