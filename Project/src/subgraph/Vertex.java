@@ -15,8 +15,15 @@ public class Vertex {
     private int id;
     private Path[] paths;
 
-    public Vertex(int id) {
+    public Vertex(int id, int maxPaths) {
 	this.id = id;
+	this.paths = new Path[maxPaths];
+    }
+    
+    public void establishConnections(boolean[] directConnections) {
+	for (int i = 0; i < directConnections.length; i++) {
+	    paths[i] = directConnections[i]? new Path(i): new Path();
+	}
     }
 
     public double getLengthTo(int id) {

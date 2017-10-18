@@ -15,8 +15,13 @@ public class Path {
 
     private ArrayList<Integer> idHistory;
     
-    public Path(ArrayList<Integer> idHistory) {
-        this.idHistory = idHistory;
+    public Path() {
+        this.idHistory = new ArrayList<>();
+    }
+    
+    public Path(int i) {
+        this.idHistory = new ArrayList<>();
+	this.idHistory.add(i);
     }
     
     public Path(Path stitch1, Path stitch2) {
