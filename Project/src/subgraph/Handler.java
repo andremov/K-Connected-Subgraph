@@ -5,6 +5,7 @@
  */
 package subgraph;
 
+import com.sun.xml.internal.ws.api.message.Messages;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,15 +31,14 @@ public abstract class Handler {
     }
     
     public static void requestAdyacentMatrix() {
-	String presentColumns = " ";
-	String division = " ";
+	String presentColumns = "  ";
 	for (int i = 0; i < NUM_VERTEX; i++) {
 	    presentColumns += i+" ";
-	    division += "__";
 	}
 	System.out.println(presentColumns);
+	getIntRow();
 	for (int i = 0; i < NUM_VERTEX; i++) {
-	    System.out.print(i+"|");
+	    System.out.print(i+" ");
 	    vertexes[i] = new Vertex(i, NUM_VERTEX);
 	    int[] intRow = getIntRow();
 	    boolean[] connections = new boolean[intRow.length];
@@ -122,7 +122,7 @@ public abstract class Handler {
     }
     
     public static void solve() {
-		
+		/*
         int numBoxes = 0;
         for (int i = 0; i < NUM_VERTEX; i++) {
             if (places.get(i).isBox()) {
@@ -159,6 +159,7 @@ public abstract class Handler {
             }
             numBoxes--;
         }
+	*/
     }
     
     private static int getInt() {
@@ -174,15 +175,47 @@ public abstract class Handler {
     }
 
     private static int[] getIntRow() {
-	String line = in.nextLine();
-	System.out.println(line);
+	int[] constructedLine = new int[1];
+	boolean accepted = false;
 	
-	return new int[2];
+	while (!accepted) {
+	    try {
+		String line = in.nextLine();
+
+		if (line.isEmpty())
+		    break;
+
+		String[] splitLine = line.split(" ");
+		int[] attempt = new int[splitLine.length];
+		for (int i = 0; i < splitLine.length; i++) {
+		    attempt[i] = Integer.parseInt(splitLine[i]);
+		}
+		constructedLine = attempt;
+		accepted = true;
+	    } catch (Exception e) { }
+	}
+	
+	return constructedLine;
     }
     
     public static void consoleInput() {
 
+	
+	requestAdyacentMatrix();
+	
+	System.out.println("So according to adyacency matrix...");
+	for (int i = 0; i < NUM_VERTEX; i++) {
+	    String summary = ("Vertex " + i + " has path to: ");
+	    for (int j = 0; j < NUM_VERTEX; j++) {
+		if (vertexes[i].getLengthTo(j) > 0 && i != j) {
+		    summary += j +", ";
+		}
+	    }
+	    summary += "and that's it.";
+	    System.out.println(summary);
+	}
 //	createMatrix();
+/*
 	System.out.println("Digite numero de cajas a agregar.");
 	int numCajas = getInt();
 
@@ -258,6 +291,6 @@ public abstract class Handler {
 		totalCost = totalCost+thisPersonCost;
 	}
 	System.out.println("Se gastó en total "+(totalCost/100)+".");
-
+*/
     }
 }
