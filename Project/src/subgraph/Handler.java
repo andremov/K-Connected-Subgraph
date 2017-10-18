@@ -14,18 +14,39 @@ import java.util.Scanner;
  */
 public abstract class Handler {
 	
-    static ArrayList<Vertex> vertexes;
+    static Vertex[] vertexes;
     static int NUM_VERTEX;
     static Scanner in;
             
     public static void init() {
 		
-        vertexes = new ArrayList<>();
 	in = new Scanner(System.in);
 	System.out.println("Digite numero de vertices.");
 	NUM_VERTEX = getInt();
+	
+        vertexes = new Vertex[NUM_VERTEX];
 		
 	consoleInput();
+    }
+    
+    public static void requestAdyacentMatrix() {
+	String presentColumns = " ";
+	String division = " ";
+	for (int i = 0; i < NUM_VERTEX; i++) {
+	    presentColumns += i+" ";
+	    division += "__";
+	}
+	System.out.println(presentColumns);
+	for (int i = 0; i < NUM_VERTEX; i++) {
+	    System.out.print(i+"|");
+	    vertexes[i] = new Vertex(i, NUM_VERTEX);
+	    int[] intRow = getIntRow();
+	    boolean[] connections = new boolean[intRow.length];
+	    for (int j = 0; j < intRow.length; j++) {
+		connections[j] = intRow[j] == 1;
+	    }
+	    vertexes[i].establishConnections(connections);
+	}
     }
     
     public static void createMatrix() {
@@ -152,9 +173,16 @@ public abstract class Handler {
 	return value;
     }
 
+    private static int[] getIntRow() {
+	String line = in.nextLine();
+	System.out.println(line);
+	
+	return new int[2];
+    }
+    
     public static void consoleInput() {
 
-	createMatrix();
+//	createMatrix();
 	System.out.println("Digite numero de cajas a agregar.");
 	int numCajas = getInt();
 
