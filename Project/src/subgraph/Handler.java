@@ -16,30 +16,18 @@ public abstract class Handler {
 	
     static ArrayList<Place> places;
     static ArrayList<Person> people;
-    static int totalCost;
-	static int NUM_VERTEX;
-    static int currentSolveStep;
+    static int NUM_VERTEX;
             
     public static void init() {
-        currentSolveStep = 0;
-        totalCost = 0;
 		
         places = new ArrayList<>();
         people = new ArrayList<>();
 		
-//        for (int i = 0; i < NUM_VERTEX; i++) {
-//            places.add(new Place(i,Data.PLACE_LIST.get(i),Data.getConnections(i)));
-//        }
-		
-
-		
-        
-		
-		consoleInput();
+	consoleInput();
     }
     
     public static void createMatrix() {
-		
+		/*
         for (int i = 0; i < NUM_VERTEX; i++) {
 			
             boolean[] allDone = new boolean[NUM_VERTEX];
@@ -107,6 +95,7 @@ public abstract class Handler {
                 }
             }
         }
+*/
     }
     
     public static void solve() {

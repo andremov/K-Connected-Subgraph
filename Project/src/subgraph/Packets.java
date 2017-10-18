@@ -11,12 +11,11 @@ package subgraph;
  */
 public class Packets {
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
-		
-		Handler.init();
-	}
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+	Handler.init();
+    }
 	
 }

@@ -12,87 +12,39 @@ import java.util.ArrayList;
  * @author movillaf
  */
 public class Path {
-	
-    private int goal;
-    private ArrayList<PlaceConnection> connections;
-    private double total;
+
+    private ArrayList<Integer> idHistory;
     
-    public Path(int goal) {
-        this.connections = new ArrayList<>();
-        this.goal = goal;
-        this.total = 0.0;
-    }
-    
-    public Path(ArrayList<PlaceConnection> connections) {
-        this.connections = connections;
-        this.goal = connections.get(connections.size()-1).getConnection();
-        calcTotal();
+    public Path(ArrayList<Integer> idHistory) {
+        this.idHistory = idHistory;
     }
     
     public Path(Path stitch1, Path stitch2) {
-        this.connections = new ArrayList<>();
+        this.idHistory = new ArrayList<>();
         
         for (int i = 0; i < stitch1.size(); i++) {
-            this.connections.add(stitch1.get(i));
+            this.idHistory.add(stitch1.get(i));
         }
         
         for (int i = 0; i < stitch2.size(); i++) {
-            this.connections.add(stitch2.get(i));
-        }
-        
-        this.goal = connections.get(connections.size()-1).getConnection();
-        calcTotal();
-    }
-
-    @Override
-    public String toString() {
-        String text = "Cost to "+goal+" is "+getRealTotal()+" following path: Origin ";
-        for (int i = 0; i < connections.size(); i++) {
-            text = text + " -> "+ connections.get(i).getConnection();
-        }
-        return text;
-    }
-    
-    
-    private void calcTotal() {
-        total = 0;
-        for (int i = 0; i < size(); i++) {
-            total = getTotal() + get(i).getCost();
+            this.idHistory.add(stitch2.get(i));
         }
     }
     
-    public boolean isDirect() {
-        return connections.size() == 1;
+    public int getEnd() {
+	return this.get(this.size()-1);
     }
-
-    /**
-     * @return the goal
-     */
-    public int getGoal() {
-        return goal;
+    
+    public int getLength() {
+	return this.idHistory.size();
     }
-
-    /**
-     * @return the connections
-     */
-    public PlaceConnection get(int index) {
-        return connections.get(index);
+    
+    public int get(int i) {
+	return this.idHistory.get(i);
     }
     
     public int size() {
-        return connections.size();
-    }
-
-    /**
-     * @return the total
-     */
-    public double getTotal() {
-        return total;
-    }
-    
-    
-    public double getRealTotal() {
-        return total/100;
+	return this.idHistory.size();
     }
     
 }
