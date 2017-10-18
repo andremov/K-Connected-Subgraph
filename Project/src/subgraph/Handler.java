@@ -14,14 +14,16 @@ import java.util.Scanner;
  */
 public abstract class Handler {
 	
-    static ArrayList<Vertex> places;
-    static ArrayList<Person> people;
+    static ArrayList<Vertex> vertexes;
     static int NUM_VERTEX;
+    static Scanner in;
             
     public static void init() {
 		
-        places = new ArrayList<>();
-        people = new ArrayList<>();
+        vertexes = new ArrayList<>();
+	in = new Scanner(System.in);
+	System.out.println("Digite numero de vertices.");
+	NUM_VERTEX = getInt();
 		
 	consoleInput();
     }
@@ -138,19 +140,9 @@ public abstract class Handler {
         }
     }
     
-    public static void bestConnection(int index) {
-        Vertex thisPlace = places.get(index);
-        if (thisPlace.isBox() && !thisPlace.isTaken()) {
-            if (hasPerson(index)) {
-                thisPlace.takeBox();
-            }
-        }
-    }
-    
     private static int getInt() {
 	boolean acceptedValue = false;
 	int value = 0;
-	Scanner in = new Scanner(System.in);
 	while (!acceptedValue) {
 	    try {
 		value = in.nextInt();
@@ -161,8 +153,6 @@ public abstract class Handler {
     }
 
     public static void consoleInput() {
-	System.out.println("Digite numero de vertices.");
-	NUM_VERTEX = getInt();
 
 	createMatrix();
 	System.out.println("Digite numero de cajas a agregar.");
