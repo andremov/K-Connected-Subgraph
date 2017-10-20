@@ -25,6 +25,10 @@ public class Vertex {
 	    paths[i] = directConnections[i]? new Path(i): new Path();
 	}
     }
+    
+    public void setPathTo(int id, Path p) {
+	paths[id] = p;
+    }
 
     public double getLengthTo(int id) {
 	return paths[id].getLength();

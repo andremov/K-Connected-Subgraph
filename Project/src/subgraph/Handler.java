@@ -5,8 +5,6 @@
  */
 package subgraph;
 
-import com.sun.xml.internal.ws.api.message.Messages;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -62,75 +60,11 @@ public abstract class Handler {
     }
     
     public static void createMatrix() {
-		/*
         for (int i = 0; i < NUM_VERTEX; i++) {
-			
-            boolean[] allDone = new boolean[NUM_VERTEX];
-            for (int k = 0; k < NUM_VERTEX; k++) {
-                allDone[k] = false;
-            }
-			
-            boolean done = false;
-            int search = 0;
-			
-            while (!done) {
-                allDone[search] = true;
-                if (search != i) {
-                    Place place = places.get(i);
-                    int currentPathIndex = -1;
-                    double currentCost = 0.0;
-                    for (int k = 0; k < place.getConnections().size(); k++) {
-                        if (place.getConnections().get(k).getGoal() == search) {
-                            currentPathIndex = k;
-                            currentCost = place.getConnections().get(k).getTotal();
-                        }
-                    }
-					
-                    for (int k = 0; k < place.getConnections().size(); k++) {
-                        Path fromPlaceToMiddle = place.getConnections().get(k);
-                        if (fromPlaceToMiddle.getGoal() != search && fromPlaceToMiddle.getGoal() != i) {
-                            Place middle = places.get(fromPlaceToMiddle.getGoal());
-                            for (int l = 0; l < middle.getConnections().size(); l++) {
-                                if (middle.getConnections().get(l).getGoal() != fromPlaceToMiddle.getGoal() && middle.getConnections().get(l).getGoal() == search) {
-                                    Path fromMiddleToGoal = middle.getConnections().get(l);
-                                    if (currentPathIndex != -1) {
-										double newCost = fromPlaceToMiddle.getTotal() + fromMiddleToGoal.getTotal();
-										if (newCost < currentCost) {
-											place.getConnections().set(currentPathIndex, new Path(fromPlaceToMiddle,fromMiddleToGoal));
-											allDone[search] = false;
-										}
-                                    } else {
-                                        place.getConnections().add(new Path(fromPlaceToMiddle,fromMiddleToGoal));
-                                        currentPathIndex = place.getConnections().size()-1;
-                                        currentCost = place.getConnections().get(place.getConnections().size()-1).getTotal();
-                                        allDone[search] = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-				
-                search++;
-                if (search == NUM_VERTEX) {
-                    search = 0;
-                    done = true;
-                    for (int k = 0; k < NUM_VERTEX; k++) {
-                        if (!allDone[k]) {
-                            done = false;
-                        }
-                    }
-					
-                    if (!done) {
-                        for (int k = 0; k < NUM_VERTEX; k++) {
-                            allDone[k] = false;
-                        }
-                    }
-                }
-            }
+	    for (int j = 0; j < NUM_VERTEX; j++) {
+		
+	    }
         }
-*/
     }
     
     public static void solve() {
@@ -218,18 +152,20 @@ public abstract class Handler {
 	
 	requestAdyacentMatrix();
 	
-	System.out.println("So according to adyacency matrix...");
-	for (int i = 0; i < NUM_VERTEX; i++) {
-	    String summary = ("Vertex " + i + " has path to: ");
-	    for (int j = 0; j < NUM_VERTEX; j++) {
-		if (vertexes[i].getLengthTo(j) > 0 && i != j) {
-		    summary += j +", ";
-		}
-	    }
-	    summary += "and that's it.";
-	    System.out.println(summary);
-	}
-//	createMatrix();
+//	System.out.println("So according to adyacency matrix...");
+//	for (int i = 0; i < NUM_VERTEX; i++) {
+//	    String summary = ("Vertex " + i + " has path to: ");
+//	    for (int j = 0; j < NUM_VERTEX; j++) {
+//		if (vertexes[i].getLengthTo(j) > 0 && i != j) {
+//		    summary += j +", ";
+//		}
+//	    }
+//	    summary += "and that's it.";
+//	    System.out.println(summary);
+//	}
+
+	createMatrix();
+	
 /*
 	System.out.println("Digite numero de cajas a agregar.");
 	int numCajas = getInt();
