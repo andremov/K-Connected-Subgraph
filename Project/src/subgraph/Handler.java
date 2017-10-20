@@ -31,21 +31,33 @@ public abstract class Handler {
     }
     
     public static void requestAdyacentMatrix() {
-	String presentColumns = "  ";
-	for (int i = 0; i < NUM_VERTEX; i++) {
-	    presentColumns += i+" ";
-	}
-	System.out.println(presentColumns);
-	getIntRow();
-	for (int i = 0; i < NUM_VERTEX; i++) {
-	    System.out.print(i+" ");
-	    vertexes[i] = new Vertex(i, NUM_VERTEX);
-	    int[] intRow = getIntRow();
-	    boolean[] connections = new boolean[intRow.length];
-	    for (int j = 0; j < intRow.length; j++) {
-		connections[j] = intRow[j] == 1;
+	getIntRow(1);
+	boolean[][] adyacentMatrix = new boolean[NUM_VERTEX][NUM_VERTEX];
+	for (int i = 1; i < NUM_VERTEX; i++) {
+	    String presentColumns = "";
+	    for (int j = 0; j < i; j++) {
+		presentColumns += j+" ";
 	    }
-	    vertexes[i].establishConnections(connections);
+	    System.out.println("Digite conexiones para vertice "+i+" con los vertices:");
+	    System.out.println(presentColumns);
+//	    System.out.print(i+" ");
+	    int[] intRow = getIntRow(i);
+	    for (int j = 0; j < intRow.length; j++) {
+		adyacentMatrix[i][j] = intRow[j] == 1;
+	    }
+	    
+	}
+	for (int i = 0; i < NUM_VERTEX; i++) {
+	    for (int j = 0; j <= i; j++) {
+		boolean value = adyacentMatrix[i][j] || adyacentMatrix[j][i] || i == j;
+		adyacentMatrix[i][j] = value;
+		adyacentMatrix[j][i] = value;
+	    }
+	}
+	
+	for (int i = 0; i < NUM_VERTEX; i++) {
+	    vertexes[i] = new Vertex(i, NUM_VERTEX);
+	    vertexes[i].establishConnections(adyacentMatrix[i]);
 	}
     }
     
@@ -174,8 +186,8 @@ public abstract class Handler {
 	return value;
     }
 
-    private static int[] getIntRow() {
-	int[] constructedLine = new int[1];
+    private static int[] getIntRow(int numInfo) {
+	int[] constructedLine = new int[numInfo];
 	boolean accepted = false;
 	
 	while (!accepted) {
@@ -186,8 +198,12 @@ public abstract class Handler {
 		    break;
 
 		String[] splitLine = line.split(" ");
-		int[] attempt = new int[splitLine.length];
-		for (int i = 0; i < splitLine.length; i++) {
+		
+		if (splitLine.length != numInfo)
+		    throw new Exception();
+		
+		int[] attempt = new int[numInfo];
+		for (int i = 0; i < numInfo; i++) {
 		    attempt[i] = Integer.parseInt(splitLine[i]);
 		}
 		constructedLine = attempt;
@@ -199,7 +215,6 @@ public abstract class Handler {
     }
     
     public static void consoleInput() {
-
 	
 	requestAdyacentMatrix();
 	
