@@ -11,12 +11,12 @@ package subgraph;
  */
 public class Graph {
     
-    Vertex[] V;
-    int[][] A;
-    int N;
-    int K;
-    boolean isConnected;
-    int[] X;
+    private Vertex[] V;
+    private int[][] A;
+    private int N;
+    private int K;
+    private boolean connected;
+    private int[] X;
     
     public Graph(Vertex[] V, int[][] A) {
 	this.V = V;
@@ -25,6 +25,13 @@ public class Graph {
 	this.X = new int[N];
 	
 	createBasicPaths();
+    }
+    
+    public void switchVertexState(int id, boolean state) {
+	V[id].switchState(state);
+	for (int i = 0; i < N; i++) {
+	    V[i].resetPaths();
+	}
     }
     
     private void createBasicPaths() {
@@ -37,27 +44,27 @@ public class Graph {
 		    vertexPaths[j].add(V[j]);
 		}
 	    }
+	    V[i].setPaths(vertexPaths);
 	}
     }
     
-    public boolean doBellmanFord() {
+    public void doBellmanFord() {
 	int i = 0;
 	while (i < N) {
 	    X[i] = 0;
 	    i++;
 	}
 	
-	boolean connected = true;
+	i = 0;
+	this.connected = true;
         while (i < N && connected) {
 	    connected = findPathsForVertex(i);
 	    i++;
 	}
-	
-	return connected;
     }
 
     private boolean findPathsForVertex(int a) {
-	boolean connected = false;
+	boolean checkConnection = false;
 	
 	boolean[] donePaths = new boolean[N];
 	for (int j = 0; j < N; j++) {
@@ -66,6 +73,7 @@ public class Graph {
 
 	boolean done = false;
 	int goalID = 0;
+	int changes = 0;
 	Vertex goal = V[goalID];
 	Vertex start = V[a];
 	
@@ -74,12 +82,9 @@ public class Graph {
 
 	while (!done) {
 	    
-	    int changes = 0;
-	    
 	    if (start.getP()[goalID].getGoal() != goal && goal.isActive()) {
 		int currentPathIndex = -1;
 		int currentLength = N;
-
 		for (int j = 0; j < N; j++) {
 		    if (start.getP()[j].getGoal() == V[j]) {
 			Vertex midVertex = start.getP()[j].getGoal();
@@ -90,12 +95,17 @@ public class Graph {
 			}
 		    }
 		}
+		
 		if (currentPathIndex != -1) {
+		    start.getP()[goalID].add(start.getP()[currentPathIndex]);
+		    start.getP()[goalID].add(start.getP()[currentPathIndex].getGoal().getP()[goalID]);
 		    X[currentPathIndex]++;
 		    donePaths[goalID] = true;
 		    changes++;
 		}
 	
+	    } else {
+		donePaths[goalID] = true;
 	    }
 
 	    goalID++;
@@ -109,11 +119,12 @@ public class Graph {
 		}
 
 		if (done) {
-		    connected = true;
+		    checkConnection = true;
 		} else {
-		    if (changes == 0)
+		    if (changes == 0) {
 			break;
-			
+		    }
+		    changes = 0;
 		    for (int k = 0; k < N; k++) {
 			donePaths[k] = false;
 		    }
@@ -121,7 +132,10 @@ public class Graph {
 	    }
 	    goal = V[goalID];
 	}
-	return connected;
+	return checkConnection;
     }
     
+    public boolean isConnected() {
+	return connected;
+    }
 }

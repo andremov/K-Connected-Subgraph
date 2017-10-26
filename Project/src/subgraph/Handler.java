@@ -33,8 +33,16 @@ public abstract class Handler {
 	
 	Graph G = new Graph(V,C);
 	
-	boolean connected = G.doBellmanFord();
-	System.out.println("Given graph G is connected? "+connected);
+	G.doBellmanFord();
+	System.out.println("Given graph G is connected? "+G.isConnected());
+	
+//	for (int i = 0; i < maxVertex; i++) {
+//	    G.switchVertexState(i, false);
+//	    G.doBellmanFord();
+//	    System.out.println("Altered graph G with disabled vector "+i+" is connected? "+G.isConnected());
+//	    G.switchVertexState(i, true);
+//	}
+	
 	
 //		
 //	in = new Scanner(System.in);

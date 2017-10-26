@@ -30,6 +30,7 @@ public class Vertex {
 	this.N = name;
 	this.P = new Path[maxVertex];
 	this.grade = 0;
+	this.active = true;
     }
     
     public boolean isActive() {
@@ -40,7 +41,16 @@ public class Vertex {
 	this.active = newState;
     }
     
-    public void getPaths(Path[] P) {
+    public void resetPaths() {
+	for (int i = 0; i < P.length; i++) {
+	    System.out.println(i+": "+P[i]);
+	    if (P[i].getLength() > 1) {
+		P[i] = new Path(this);
+	    }
+	}
+    }
+    
+    public void setPaths(Path[] P) {
 	this.P = P;
 	recalculateGrade();
     }
@@ -76,4 +86,7 @@ public class Vertex {
 	return grade;
     }
     
+    public String toString() {
+	return getN();
+    }
 }

@@ -20,20 +20,14 @@ public class Path {
 	this.path.add(start);
     }
     
-    public Path(Path start, Path end) {
-        this.path = new ArrayList<>();
-        
-        for (int i = 0; i < start.getLength(); i++) {
-            this.path.add(start.get(i));
-        }
-        
-        for (int i = 0; i < end.getLength(); i++) {
-            this.path.add(end.get(i));
-        }
-    }
-    
     public void add(Vertex V) {
         this.path.add(V);
+    }
+    
+    public void add(Path end) {
+        for (int i = 1; i < end.getLength(); i++) {
+            this.path.add(end.get(i));
+        }
     }
     
     public Vertex getGoal() {
@@ -46,6 +40,14 @@ public class Path {
     
     public Vertex get(int i) {
 	return this.path.get(i);
+    }
+    
+    public String toString() {
+	String s = ""+path.get(0);
+	for (int i = 1; i < path.size(); i++) {
+	    s += " -> " + path.get(i);
+	}
+	return s;
     }
     
 }
