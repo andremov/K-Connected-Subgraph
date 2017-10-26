@@ -138,4 +138,12 @@ public class Graph {
     public boolean isConnected() {
 	return connected;
     }
+    
+    public String vertexName(int i) {
+	return V[i]+"";
+    }
+    
+    public int numVertex() {
+	return N;
+    }
 }
