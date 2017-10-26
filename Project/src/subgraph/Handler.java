@@ -33,7 +33,8 @@ public abstract class Handler {
 	
 	Graph G = new Graph(V,C);
 	
-	G.doBellmanFord();
+	boolean connected = G.doBellmanFord();
+	System.out.println("Given graph G is connected? "+connected);
 	
 //		
 //	in = new Scanner(System.in);

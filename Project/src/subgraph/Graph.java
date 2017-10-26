@@ -16,11 +16,13 @@ public class Graph {
     int N;
     int K;
     boolean isConnected;
+    int[] X;
     
     public Graph(Vertex[] V, int[][] A) {
 	this.V = V;
 	this.A = A;
 	this.N = V.length;
+	this.X = new int[N];
 	
 	createBasicPaths();
     }
@@ -38,8 +40,88 @@ public class Graph {
 	}
     }
     
-    public void doBellmanFord() {
+    public boolean doBellmanFord() {
+	int i = 0;
+	while (i < N) {
+	    X[i] = 0;
+	    i++;
+	}
 	
+	boolean connected = true;
+        while (i < N && connected) {
+	    connected = findPathsForVertex(i);
+	    i++;
+	}
+	
+	return connected;
+    }
+
+    private boolean findPathsForVertex(int a) {
+	boolean connected = false;
+	
+	boolean[] donePaths = new boolean[N];
+	for (int j = 0; j < N; j++) {
+	    donePaths[j] = false;
+	}
+
+	boolean done = false;
+	int goalID = 0;
+	Vertex goal = V[goalID];
+	Vertex start = V[a];
+	
+	if (!start.isActive())
+	    return true;
+
+	while (!done) {
+	    
+	    int changes = 0;
+	    
+	    if (start.getP()[goalID].getGoal() != goal && goal.isActive()) {
+		int currentPathIndex = -1;
+		int currentLength = N;
+
+		for (int j = 0; j < N; j++) {
+		    if (start.getP()[j].getGoal() == V[j]) {
+			Vertex midVertex = start.getP()[j].getGoal();
+			int possibleLength = start.getP()[j].getLength() + midVertex.getP()[goalID].getLength();
+			if (midVertex.getP()[goalID].getGoal() == goal && midVertex.isActive() && possibleLength < currentLength) {
+			    currentPathIndex = j;
+			    currentLength = possibleLength;
+			}
+		    }
+		}
+		if (currentPathIndex != -1) {
+		    X[currentPathIndex]++;
+		    donePaths[goalID] = true;
+		    changes++;
+		}
+	
+	    }
+
+	    goalID++;
+	    if (goalID == N) {
+		goalID = 0;
+		done = true;
+		for (int k = 0; k < N; k++) {
+		    if (!donePaths[k]) {
+			done = false;
+		    }
+		}
+
+		if (done) {
+		    connected = true;
+		} else {
+		    if (changes == 0)
+			break;
+			
+		    for (int k = 0; k < N; k++) {
+			donePaths[k] = false;
+		    }
+		}
+	    }
+	    goal = V[goalID];
+	}
+	return connected;
     }
     
 }

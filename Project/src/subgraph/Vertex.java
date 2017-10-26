@@ -14,6 +14,7 @@ public class Vertex {
 
     private String N;
     private Path[] P;
+    private boolean active;
     private int grade;
 
 //    public static Vertex[] createVertexArray(String[] names) {
@@ -29,6 +30,14 @@ public class Vertex {
 	this.N = name;
 	this.P = new Path[maxVertex];
 	this.grade = 0;
+    }
+    
+    public boolean isActive() {
+	return this.active;
+    }
+    
+    public void switchState(boolean newState) {
+	this.active = newState;
     }
     
     public void getPaths(Path[] P) {
