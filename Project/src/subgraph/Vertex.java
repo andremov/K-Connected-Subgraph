@@ -12,30 +12,59 @@ package subgraph;
  */
 public class Vertex {
 
-    private int id;
-    private Path[] paths;
+    private String N;
+    private Path[] P;
+    private int grade;
 
-    public Vertex(int id, int maxPaths) {
-	this.id = id;
-	this.paths = new Path[maxPaths];
+//    public static Vertex[] createVertexArray(String[] names) {
+    public static Vertex[] createVertexArray(String... names) {
+	Vertex[] created = new Vertex[names.length];
+	for (int i = 0; i < names.length; i++) {
+	    created[i] = new Vertex(names[i],names.length);
+	}
+	return created;
     }
     
-    public void establishConnections(boolean[] directConnections) {
-	for (int i = 0; i < directConnections.length; i++) {
-	    paths[i] = directConnections[i]? new Path(i): new Path();
+    public Vertex(String name, int maxVertex) {
+	this.N = name;
+	this.P = new Path[maxVertex];
+	this.grade = 0;
+    }
+    
+    public void getPaths(Path[] P) {
+	this.P = P;
+	recalculateGrade();
+    }
+    
+    
+    public void recalculateGrade() {
+	this.grade = 0;
+	for (int i = 0; i < P.length; i++) {
+	    if (P[i].getLength() == 2) {
+		this.grade++;
+	    }
 	}
     }
-    
-    public void setPathTo(int id, Path p) {
-	paths[id] = p;
+
+    /**
+     * @return the N
+     */
+    public String getN() {
+	return N;
     }
 
-    public double getLengthTo(int id) {
-	return paths[id].getLength();
+    /**
+     * @return the P
+     */
+    public Path[] getP() {
+	return P;
     }
 
-    public Path getPathTo(int id) {
-	return paths[id];
+    /**
+     * @return the grade
+     */
+    public int getGrade() {
+	return grade;
     }
     
 }

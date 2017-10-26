@@ -9,7 +9,7 @@ package subgraph;
  *
  * @author Andres
  */
-public class Packets {
+public class Main {
 
     /**
      * @param args the command line arguments

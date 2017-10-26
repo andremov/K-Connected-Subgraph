@@ -13,43 +13,39 @@ import java.util.ArrayList;
  */
 public class Path {
 
-    private ArrayList<Integer> idHistory;
+    private ArrayList<Vertex> path;
     
-    public Path() {
-        this.idHistory = new ArrayList<>();
+    public Path(Vertex start) {
+        this.path = new ArrayList<>();
+	this.path.add(start);
     }
     
-    public Path(int i) {
-        this.idHistory = new ArrayList<>();
-	this.idHistory.add(i);
-    }
-    
-    public Path(Path stitch1, Path stitch2) {
-        this.idHistory = new ArrayList<>();
+    public Path(Path start, Path end) {
+        this.path = new ArrayList<>();
         
-        for (int i = 0; i < stitch1.size(); i++) {
-            this.idHistory.add(stitch1.get(i));
+        for (int i = 0; i < start.getLength(); i++) {
+            this.path.add(start.get(i));
         }
         
-        for (int i = 0; i < stitch2.size(); i++) {
-            this.idHistory.add(stitch2.get(i));
+        for (int i = 0; i < end.getLength(); i++) {
+            this.path.add(end.get(i));
         }
     }
     
-    public int getEnd() {
-	return this.get(this.size()-1);
+    public void add(Vertex V) {
+        this.path.add(V);
+    }
+    
+    public Vertex getGoal() {
+	return this.get(this.getLength()-1);
     }
     
     public int getLength() {
-	return this.idHistory.size();
+	return this.path.size();
     }
     
-    public int get(int i) {
-	return this.idHistory.get(i);
-    }
-    
-    public int size() {
-	return this.idHistory.size();
+    public Vertex get(int i) {
+	return this.path.get(i);
     }
     
 }
