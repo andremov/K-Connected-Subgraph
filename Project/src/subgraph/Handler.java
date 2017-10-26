@@ -36,12 +36,12 @@ public abstract class Handler {
 	G.doBellmanFord();
 	System.out.println("Given graph G is connected? "+G.isConnected());
 	
-//	for (int i = 0; i < maxVertex; i++) {
-//	    G.switchVertexState(i, false);
-//	    G.doBellmanFord();
-//	    System.out.println("Altered graph G with disabled vector "+i+" is connected? "+G.isConnected());
-//	    G.switchVertexState(i, true);
-//	}
+	for (int i = 0; i < maxVertex; i++) {
+	    G.switchVertexState(i, false);
+	    G.doBellmanFord();
+	    System.out.println("Altered graph G with disabled vector "+V[i]+" is connected? "+G.isConnected());
+	    G.switchVertexState(i, true);
+	}
 	
 	
 //		

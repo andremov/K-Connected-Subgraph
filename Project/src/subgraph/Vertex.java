@@ -43,8 +43,7 @@ public class Vertex {
     
     public void resetPaths() {
 	for (int i = 0; i < P.length; i++) {
-	    System.out.println(i+": "+P[i]);
-	    if (P[i].getLength() > 1) {
+	    if (P[i].getLength() > 2) {
 		P[i] = new Path(this);
 	    }
 	}

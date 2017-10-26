@@ -77,11 +77,11 @@ public class Graph {
 	Vertex goal = V[goalID];
 	Vertex start = V[a];
 	
-	if (!start.isActive())
+	if (!start.isActive()) {
 	    return true;
+	}
 
 	while (!done) {
-	    
 	    if (start.getP()[goalID].getGoal() != goal && goal.isActive()) {
 		int currentPathIndex = -1;
 		int currentLength = N;
