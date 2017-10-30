@@ -197,27 +197,38 @@ public class MatrixWindow extends JFrame {
 		int y = adyacency.getSelectedRow();
 		int curValue = Integer.parseInt((String)adyacency.getValueAt(y,x));
 		adyacency.setValueAt(""+(curValue+1)%2,y,x);
-		adyacency.setValueAt((curValue+1)%2,x-1,y+1);
+		adyacency.setValueAt(""+(curValue+1)%2,x-1,y+1);
 	}
 
     /**
      * manda la informacion a la ventana principal
      */
     private void sendGraph() {
+		
 		DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
 		String[] names = new String[model.getRowCount()];
 		for (int i = 0; i < model.getRowCount(); i++) {
 			names[i] = (String)adyacency.getValueAt(i,0);
 		}
+		
 		Vertex[] V = Vertex.createVertexArray(names);
 		int[][] C = new int[model.getRowCount()][model.getRowCount()];
 		
 		for (int i = 0; i < model.getRowCount(); i++) {
-			for (int j = 1; j < model.getRowCount()+1; j++) {
-				C[i][j-1] = Integer.parseInt((String)adyacency.getValueAt(i,j));
+			for (int j = 0; j < model.getRowCount(); j++) {
+//				try {
+				System.out.println("checking "+i+", "+(j+1));
+				System.out.println("value = "+(String)adyacency.getValueAt(i,j+1));
+				C[i][j] = Integer.parseInt((String)adyacency.getValueAt(i,j+1));
+				System.out.println("C["+i+"]["+j+"] = "+C[i][j]);
+//				} catch (Exception e) {
+//					System.out.println("!!");
+//				}
 			}
 		}
+		System.out.println("got adyacency");
 		
+		System.out.println("sending info...");
 		Handler.createGraph(V,C);
     }
 	
