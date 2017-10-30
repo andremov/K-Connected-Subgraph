@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,6 +31,11 @@ public class MatrixWindow extends JFrame {
     JButton resetBtn;
 
     JTable adyacency;
+	
+	JLabel requestK;
+	JTextField fieldK;
+	
+	boolean didChanges;
 
     public MatrixWindow() {
 		setLayout(null);
@@ -49,6 +55,8 @@ public class MatrixWindow extends JFrame {
      */
     private void init() {
 
+		didChanges = false;
+		
 		adyacency = new JTable();
 		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
 		adyacency.setRowHeight(30);
@@ -87,6 +95,18 @@ public class MatrixWindow extends JFrame {
 			}
 		});
 		add(addVertexBtn);
+		
+		requestK = new JLabel("K:");
+		requestK.setSize(50, 30);
+		requestK.setLocation(605, 150);
+		requestK.setFocusable(false);
+		add(requestK);
+		
+		fieldK = new JTextField();
+		fieldK.setSize(100, 30);
+		fieldK.setLocation(625, 150);
+		add(fieldK);
+		
 
 		resetBtn = new JButton("Reset");
 		resetBtn.setSize(175, 50);
@@ -116,6 +136,7 @@ public class MatrixWindow extends JFrame {
     }
 	
 	private void reset() {
+		didChanges = true;
 		adyacency = new JTable();
 		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
 		adyacency.setRowHeight(30);
@@ -142,6 +163,7 @@ public class MatrixWindow extends JFrame {
      * agrega una ciudad a la tabla
      */
     private void addVertex() {
+		didChanges = true;
 		String name = generateName(adyacency.getRowCount());
 	    DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
 
@@ -188,6 +210,7 @@ public class MatrixWindow extends JFrame {
 	}
 	
 	private void toggleValue() {
+		didChanges = true;
 		int x = adyacency.getSelectedColumn();
 		int y = adyacency.getSelectedRow();
 		int curValue = Integer.parseInt((String)adyacency.getValueAt(y,x));
@@ -199,23 +222,27 @@ public class MatrixWindow extends JFrame {
      * manda la informacion a la ventana principal
      */
     private void sendGraph() {
-		
-		DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
-		String[] names = new String[model.getRowCount()];
-		for (int i = 0; i < model.getRowCount(); i++) {
-			names[i] = (String)adyacency.getValueAt(i,0);
-		}
-		
-		Vertex[] V = Vertex.createVertexArray(names);
-		int[][] C = new int[model.getRowCount()][model.getRowCount()];
-		
-		for (int i = 0; i < model.getRowCount(); i++) {
-			for (int j = 0; j < model.getRowCount(); j++) {
-				C[i][j] = Integer.parseInt((String)adyacency.getValueAt(i,j+1));
+		if (didChanges) {
+			DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
+			String[] names = new String[model.getRowCount()];
+			for (int i = 0; i < model.getRowCount(); i++) {
+				names[i] = (String)adyacency.getValueAt(i,0);
 			}
+
+			Vertex[] V = Vertex.createVertexArray(names);
+			int[][] C = new int[model.getRowCount()][model.getRowCount()];
+
+			for (int i = 0; i < model.getRowCount(); i++) {
+				for (int j = 0; j < model.getRowCount(); j++) {
+					C[i][j] = Integer.parseInt((String)adyacency.getValueAt(i,j+1));
+				}
+			}
+
+			Handler.createGraph(V,C);
+			didChanges = false;
+		} else {
+			Handler.G.minimumGraphFor(Integer.parseInt(fieldK.getText()));
 		}
-		
-		Handler.createGraph(V,C);
     }
 	
     private class TableModel extends DefaultTableModel {

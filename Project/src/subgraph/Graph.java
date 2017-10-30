@@ -85,7 +85,7 @@ public class Graph {
 		locatingV = (locatingV+1)%V.length;
 	}
     
-    public String minimumGraphFor(int K) {
+    public void minimumGraphFor(int K) {
 		int minimumC = N;
 		int index = -1;
 		for (int i = 0; i < this.allSetups.length; i++) {
@@ -97,7 +97,9 @@ public class Graph {
 			}
 			}
 		}
-		return this.allSetups[index].toString();
+		
+		this.setup(index);
+		doBellmanFord();
     }
     
     private void doBellmanFord() {
