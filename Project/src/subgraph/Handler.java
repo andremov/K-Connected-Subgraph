@@ -14,38 +14,27 @@ import java.util.Scanner;
  */
 public abstract class Handler {
 	
-    static Vertex[] vertexes;
-    static int NUM_VERTEX;
-    static Scanner in;
-            
+//    static Vertex[] vertexes;
+//    static int NUM_VERTEX;
+//    static Scanner in;
+    
+	public static Graph G;
+	
     public static void init() {
-	
-	Vertex[] V = Vertex.createVertexArray("A", "B", "C", "D", "E", "F", "G", "H");
-	int[][] C = {
-	    {0, 1, 1, 0, 0, 1, 0, 0}, // 0
-	    {1, 0, 1, 0, 0, 0, 0, 0}, // 1
-	    {1, 1, 0, 0, 0, 0, 0, 0}, // 2
-	    {0, 0, 0, 0, 1, 1, 0, 1}, // 3
-	    {0, 0, 0, 1, 0, 0, 1, 1}, // 4
-	    {1, 0, 0, 1, 0, 0, 0, 1}, // 5
-	    {0, 0, 0, 0, 1, 0, 0, 1}, // 6
-	    {0, 0, 0, 1, 1, 1, 1, 0}, // 7
-	};
-	
-	int maxVertex = V.length;
-	int max = (int) Math.pow(2,maxVertex);
-	GraphSetup[] setups = new GraphSetup[ max ];
-	setups[0] = new GraphSetup(maxVertex);
-	int i = 0;
-	while (setups[i].canNext()) {
-	    i++;
-	    setups[i] = setups[i-1].next();
-	}
-	
-	Graph G = new Graph(V, C, setups);
-	
-	
-	
-	
+		new MatrixWindow();
     }
+	
+	public static void createGraph(Vertex[] V, int[][] C) {
+		int numVertex = V.length;
+		int max = (int) Math.pow(2,numVertex);
+		GraphSetup[] setups = new GraphSetup[ max ];
+		setups[0] = new GraphSetup(numVertex);
+		int i = 0;
+		while (setups[i].canNext()) {
+			i++;
+			setups[i] = setups[i-1].next();
+		}
+
+		G = new Graph(V, C, setups);
+	}
 }

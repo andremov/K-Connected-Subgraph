@@ -16,52 +16,61 @@ public class Vertex {
     private Path[] P;
     private boolean active;
     private int grade;
+	
+	
+	// DISPLAY VARS
+	private int x;
+	private int y;
 
-//    public static Vertex[] createVertexArray(String[] names) {
-    public static Vertex[] createVertexArray(String... names) {
-	Vertex[] created = new Vertex[names.length];
-	for (int i = 0; i < names.length; i++) {
-	    created[i] = new Vertex(names[i],names.length);
-	}
-	return created;
+    public static Vertex[] createVertexArray(String[] names) {
+//    public static Vertex[] createVertexArray(String... names) {
+		Vertex[] created = new Vertex[names.length];
+		for (int i = 0; i < names.length; i++) {
+			created[i] = new Vertex(names[i],names.length);
+		}
+		return created;
     }
     
     public Vertex(String name, int maxVertex) {
-	this.N = name;
-	this.P = new Path[maxVertex];
-	this.grade = 0;
-	this.active = true;
+		this.N = name;
+		this.P = new Path[maxVertex];
+		this.grade = 0;
+		this.active = true;
     }
     
     public boolean isActive() {
-	return this.active;
+		return this.active;
     }
     
     public void switchState(boolean newState) {
-	this.active = newState;
+		this.active = newState;
     }
     
     public void resetPaths() {
-	for (int i = 0; i < P.length; i++) {
-	    if (P[i].getLength() > 2) {
-		P[i] = new Path(this);
-	    }
-	}
+		for (int i = 0; i < P.length; i++) {
+			if (P[i].getLength() > 2) {
+			P[i] = new Path(this);
+			}
+		}
     }
     
     public void setPaths(Path[] P) {
-	this.P = P;
-	recalculateGrade();
+		this.P = P;
+		recalculateGrade();
     }
     
+	public void locate(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
     
     public void recalculateGrade() {
-	this.grade = 0;
-	for (int i = 0; i < P.length; i++) {
-	    if (P[i].getLength() == 2) {
-		this.grade++;
-	    }
-	}
+		this.grade = 0;
+		for (int i = 0; i < P.length; i++) {
+			if (P[i].getLength() == 2) {
+			this.grade++;
+			}
+		}
     }
 
     /**
@@ -75,17 +84,25 @@ public class Vertex {
      * @return the P
      */
     public Path[] getP() {
-	return P;
+		return P;
     }
 
     /**
      * @return the grade
      */
     public int getGrade() {
-	return grade;
+		return grade;
     }
     
     public String toString() {
-	return getN();
+		return getN();
     }
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
 }
