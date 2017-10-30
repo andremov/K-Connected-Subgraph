@@ -5,6 +5,8 @@
  */
 package subgraph;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 
 /**
@@ -19,39 +21,20 @@ public class DisplayWindow extends JFrame {
     public static int WINDOW_Y = 800;
 
     static Display screen;
-    static City[] cities;
-    public static int MAX_CITIES;
-    private static int currentCity;
-    static int totalCost;
 
     public DisplayWindow() {
-	setLayout(null);
-	setSize(WINDOW_X+CANVAS_X,WINDOW_Y+CANVAS_Y);
-	setLocationRelativeTo(null);
-	setTitle("Aeropuertos [AMovilla & AVasquez]");
-	setDefaultCloseOperation(EXIT_ON_CLOSE);
-	setResizable(false);
+		setLayout(null);
+		setSize(WINDOW_X+CANVAS_X,WINDOW_Y+CANVAS_Y);
+		setLocationRelativeTo(null);
+		setTitle("K-Conexos");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
-	init();
+		init();
 
-	setVisible(true);
+		setVisible(true);
 
-	new Thread(screen).start();
-    }
-	
-    /**
-     * recibe las ciudades entregadas poor parametro
-     * @param pCities 
-     */
-    public static void setCities(City[] pCities) {
-	if (cities != null) {
-	    for (int i = 0; i < Integer.min(pCities.length, cities.length); i++) {
-		pCities[i].setX(cities[i].getCenterX());
-		pCities[i].setY(cities[i].getCenterY());
-	    }
-	}
-	cities = pCities;
-	MAX_CITIES = cities.length;
+		new Thread(screen).start();
     }
 	
     /**
@@ -59,26 +42,33 @@ public class DisplayWindow extends JFrame {
      * @param x
      * @param y 
      */
-    public static void locateCity(int x, int y) {
-	if (cities != null) {
-	    cities[currentCity%cities.length].setX(x);
-	    cities[currentCity%cities.length].setY(y);
-	    currentCity++;
-	}
+    public static void locateVertex(int x, int y) {
+		if (Handler.G != null) {
+			Handler.G.locateVertex(x,y);
+		}
     }
-	
 
     /**
      * inicializa la interfaz de esta ventana
      */
     private void init() {
-	MAX_CITIES = 0;
-	totalCost = 0;
 
-	screen = new Display();
-	screen.setSize(WINDOW_X,WINDOW_Y);
-	screen.setLocation(1,1);
-	add(screen);
+		screen = new Display();
+		screen.setSize(WINDOW_X,WINDOW_Y);
+		screen.setLocation(1,1);
+		screen.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) { locateVertex(e.getX(), e.getY()); }
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		add(screen);
 
     }
 	
