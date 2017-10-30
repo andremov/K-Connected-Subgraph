@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,11 +24,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MatrixWindow extends JFrame {
 	
-    JLabel infoDisplay;
     JButton processBtn;
 
-    JLabel cityNameDisplay;
-    JTextField cityName;
     JButton addVertexBtn;
     JButton resetBtn;
 
@@ -57,7 +53,6 @@ public class MatrixWindow extends JFrame {
 		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
 		adyacency.setRowHeight(30);
 		adyacency.getColumnModel().getColumn(0).setPreferredWidth(140);
-		adyacency.getColumnModel().getColumn(1).setPreferredWidth(120);
 		adyacency.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		adyacency.getTableHeader().setReorderingAllowed(false);
 		adyacency.addMouseListener(new MouseListener() {
@@ -98,7 +93,7 @@ public class MatrixWindow extends JFrame {
 		});
 		add(addVertexBtn);
 
-		resetBtn = new JButton("Eliminar Ciudad");
+		resetBtn = new JButton("Reset");
 		resetBtn.setSize(175, 50);
 		resetBtn.setLocation(605, 90);
 		resetBtn.setFocusable(false);
@@ -109,14 +104,6 @@ public class MatrixWindow extends JFrame {
 		    }
 		});
 		add(resetBtn);
-
-		final String text = "Ingrese '0' para inhabilitar una conexion.";
-		final String html1 = "<html><body style='width: ";
-		final String html2 = "px'>";
-		infoDisplay = new JLabel(html1+175+html2+text);
-		infoDisplay.setSize(175, 40);
-		infoDisplay.setLocation(605, 320);
-		add(infoDisplay);
 
 		processBtn = new JButton("Resolver");
 		processBtn.setSize(175, 60);
@@ -146,19 +133,14 @@ public class MatrixWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				toggleValue();
 			}
-
 			@Override
 			public void mousePressed(MouseEvent e) { }
-
 			@Override
 			public void mouseReleased(MouseEvent e) { }
-
 			@Override
 			public void mouseEntered(MouseEvent e) { }
-
 			@Override
 			public void mouseExited(MouseEvent e) { }
-			
 		});
 	}
 	
@@ -166,7 +148,7 @@ public class MatrixWindow extends JFrame {
      * agrega una ciudad a la tabla
      */
     private void addVertex() {
-		String name = generateName(adyacency.getRowCount()+1);
+		String name = generateName(adyacency.getRowCount());
 	    DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
 
 	    Object[] columnData = new Object[adyacency.getRowCount()];
@@ -174,12 +156,11 @@ public class MatrixWindow extends JFrame {
 
 	    Object[] rowData = new Object[adyacency.getColumnCount()];
 	    for (int i = 1; i < rowData.length; i++) {
-		rowData[i] = "1";
+			rowData[i] = "1";
 	    }
 	    rowData[0] = name;
 	    model.addRow(rowData);
 
-	    cityName.setText("");
 	    sendGraph();
     }
 	
@@ -216,7 +197,7 @@ public class MatrixWindow extends JFrame {
 		int y = adyacency.getSelectedRow();
 		int curValue = Integer.parseInt((String)adyacency.getValueAt(x,y));
 		adyacency.setValueAt((curValue+1)%2,x,y);
-		adyacency.setValueAt((curValue+1)%2,y,x);
+		adyacency.setValueAt((curValue+1)%2,y+1,x);
 	}
 
     /**

@@ -81,8 +81,7 @@ public class Graph {
     }
 	
 	public void locateVertex(int x, int y) {
-		locatingV++;
-		locatingV %= V.length;
+		locatingV = (locatingV+1)%V.length;
 		V[locatingV].locate(x,y);
 	}
     

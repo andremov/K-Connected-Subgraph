@@ -22,6 +22,7 @@ public abstract class Handler {
 	
     public static void init() {
 		new MatrixWindow();
+		new DisplayWindow();
     }
 	
 	public static void createGraph(Vertex[] V, int[][] C) {
