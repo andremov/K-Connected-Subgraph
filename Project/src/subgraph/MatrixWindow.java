@@ -152,16 +152,18 @@ public class MatrixWindow extends JFrame {
 	    DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
 
 	    Object[] columnData = new Object[adyacency.getRowCount()];
+	    for (int i = 0; i < columnData.length; i++) {
+			columnData[i] = "1";
+	    }
 	    model.addColumn(name,columnData);
 
 	    Object[] rowData = new Object[adyacency.getColumnCount()];
 	    for (int i = 1; i < rowData.length; i++) {
+			System.out.println(i+" :: "+rowData[i]);
 			rowData[i] = "1";
 	    }
 	    rowData[0] = name;
 	    model.addRow(rowData);
-
-	    sendGraph();
     }
 	
 	private String generateName(int id) {

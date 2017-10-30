@@ -5,9 +5,6 @@
  */
 package subgraph;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 /**
  *
  * @author movillaf

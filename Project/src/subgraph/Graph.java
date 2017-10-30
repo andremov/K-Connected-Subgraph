@@ -81,8 +81,9 @@ public class Graph {
     }
 	
 	public void locateVertex(int x, int y) {
-		locatingV = (locatingV+1)%V.length;
+		System.out.println("locating vertex"+locatingV);
 		V[locatingV].locate(x,y);
+		locatingV = (locatingV+1)%V.length;
 	}
     
     public String minimumGraphFor(int K) {
