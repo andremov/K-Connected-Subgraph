@@ -5,14 +5,14 @@
  */
 package subgraph;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -30,22 +30,22 @@ public class MatrixWindow extends JFrame {
 
     JLabel cityNameDisplay;
     JTextField cityName;
-    JButton addCityBtn;
-    JButton remCityBtn;
+    JButton addVertexBtn;
+    JButton resetBtn;
 
-    JTable citiesTable;
+    JTable adyacency;
 
-    public MatrixWindow(boolean canCancel) {
-	setLayout(null);
-	setSize(800,600);
-	setLocationRelativeTo(null);
-	setResizable(false);
-	setTitle("Conexiones");
-	setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    public MatrixWindow() {
+		setLayout(null);
+		setSize(800,600);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setTitle("Adyacencia");
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-	init();
+		init();
 
-	setVisible(true);
+		setVisible(true);
     }
 	
     /**
@@ -53,193 +53,202 @@ public class MatrixWindow extends JFrame {
      */
     private void init() {
 
-	citiesTable = new JTable();
-	citiesTable.setModel(new TableModel(new String[] {"Nombre","Precio Aeropuerto"},0));
-	citiesTable.setRowHeight(30);
-	citiesTable.getColumnModel().getColumn(0).setPreferredWidth(140);
-	citiesTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-	citiesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-	citiesTable.getTableHeader().setReorderingAllowed(false);
+		adyacency = new JTable();
+		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
+		adyacency.setRowHeight(30);
+		adyacency.getColumnModel().getColumn(0).setPreferredWidth(140);
+		adyacency.getColumnModel().getColumn(1).setPreferredWidth(120);
+		adyacency.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		adyacency.getTableHeader().setReorderingAllowed(false);
+		adyacency.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				toggleValue();
+			}
 
-	JScrollPane scroll = new JScrollPane(citiesTable);
-	scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	scroll.setSize(600, 559);
-	scroll.setLocation(1,1);
-	add(scroll);
+			@Override
+			public void mousePressed(MouseEvent e) { }
 
-	cityNameDisplay = new JLabel("Nombre:");
-	cityNameDisplay.setSize(50, 35);
-	cityNameDisplay.setLocation(605, 1);
-	add(cityNameDisplay);
+			@Override
+			public void mouseReleased(MouseEvent e) { }
 
-	cityName = new JTextField();
-	cityName.setSize(120, 35);
-	cityName.setFont(new Font("Arial",Font.PLAIN,20));
-	cityName.setLocation(660, 1);
-	add(cityName);
+			@Override
+			public void mouseEntered(MouseEvent e) { }
 
-	addCityBtn = new JButton("Agregar Ciudad");
-	addCityBtn.setSize(175, 50);
-	addCityBtn.setLocation(605, 37);
-	addCityBtn.setFocusable(false);
-	addCityBtn.addActionListener(new ActionListener( ) {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		addCity();
-	    }
-	});
-	add(addCityBtn);
+			@Override
+			public void mouseExited(MouseEvent e) { }
+			
+		});
 
-	remCityBtn = new JButton("Eliminar Ciudad");
-	remCityBtn.setSize(175, 50);
-	remCityBtn.setLocation(605, 90);
-	remCityBtn.setFocusable(false);
-	remCityBtn.addActionListener(new ActionListener( ) {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		removeCity();
-	    }
-	});
-	add(remCityBtn);
+		JScrollPane scroll = new JScrollPane(adyacency);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setSize(600, 559);
+		scroll.setLocation(1,1);
+		add(scroll);
 
-	final String text = "Ingrese '-1' para inhabilitar una conexion.";
-	final String html1 = "<html><body style='width: ";
-	final String html2 = "px'>";
-	infoDisplay = new JLabel(html1+175+html2+text);
-	infoDisplay.setSize(175, 40);
-	infoDisplay.setLocation(605, 320);
-	add(infoDisplay);
+		addVertexBtn = new JButton("Agregar Vertice");
+		addVertexBtn.setSize(175, 50);
+		addVertexBtn.setLocation(605, 37);
+		addVertexBtn.setFocusable(false);
+		addVertexBtn.addActionListener(new ActionListener( ) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addVertex();
+			}
+		});
+		add(addVertexBtn);
 
-	processBtn = new JButton("Resolver");
-	processBtn.setSize(175, 60);
-	processBtn.setLocation(605, 400);
-	processBtn.setFocusable(false);
-	processBtn.addActionListener(new ActionListener( ) {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		try {
-		    create();
-		    Window.solve();
-		} catch(Exception ex) { }
-	    }
-	});
-	add(processBtn);
+		resetBtn = new JButton("Eliminar Ciudad");
+		resetBtn.setSize(175, 50);
+		resetBtn.setLocation(605, 90);
+		resetBtn.setFocusable(false);
+		resetBtn.addActionListener(new ActionListener( ) {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+				reset();
+		    }
+		});
+		add(resetBtn);
+
+		final String text = "Ingrese '0' para inhabilitar una conexion.";
+		final String html1 = "<html><body style='width: ";
+		final String html2 = "px'>";
+		infoDisplay = new JLabel(html1+175+html2+text);
+		infoDisplay.setSize(175, 40);
+		infoDisplay.setLocation(605, 320);
+		add(infoDisplay);
+
+		processBtn = new JButton("Resolver");
+		processBtn.setSize(175, 60);
+		processBtn.setLocation(605, 400);
+		processBtn.setFocusable(false);
+		processBtn.addActionListener(new ActionListener( ) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+				   sendGraph();
+				} catch(Exception ex) { }
+			}
+		});
+		add(processBtn);
     }
+	
+	private void reset() {
+		adyacency = new JTable();
+		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
+		adyacency.setRowHeight(30);
+		adyacency.getColumnModel().getColumn(0).setPreferredWidth(140);
+		adyacency.getColumnModel().getColumn(1).setPreferredWidth(120);
+		adyacency.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		adyacency.getTableHeader().setReorderingAllowed(false);
+		adyacency.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				toggleValue();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) { }
+
+			@Override
+			public void mouseReleased(MouseEvent e) { }
+
+			@Override
+			public void mouseEntered(MouseEvent e) { }
+
+			@Override
+			public void mouseExited(MouseEvent e) { }
+			
+		});
+	}
 	
     /**
      * agrega una ciudad a la tabla
      */
-    private void addCity() {
-	String name = cityName.getText();
-	if (!name.isEmpty()) {
-	    DefaultTableModel model = (DefaultTableModel) citiesTable.getModel();
+    private void addVertex() {
+		String name = generateName(adyacency.getRowCount()+1);
+	    DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
 
-	    Object[] columnData = new Object[citiesTable.getRowCount()];
+	    Object[] columnData = new Object[adyacency.getRowCount()];
 	    model.addColumn(name,columnData);
 
-	    Object[] rowData = new Object[citiesTable.getColumnCount()];
+	    Object[] rowData = new Object[adyacency.getColumnCount()];
 	    for (int i = 1; i < rowData.length; i++) {
 		rowData[i] = "1";
 	    }
 	    rowData[0] = name;
-	    rowData[1] = "9";
 	    model.addRow(rowData);
 
 	    cityName.setText("");
-	    create();
-	}
+	    sendGraph();
     }
-
-    /**
-     * elimina una ciudad de la tabla
-     */
-    private void removeCity() {
-	int row = citiesTable.getSelectedRow();
-	if (row >= 0) {
-	    DefaultTableModel model = (DefaultTableModel) citiesTable.getModel();
-	    model.removeRow(row);
-	    ((TableModel)model).removeColumn(row+2);
-	    create();
+	
+	private String generateName(int id) {
+		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+							"P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+		String result = "";
+		ArrayList<Integer> digits = new ArrayList<>();
+		digits.add(0);
+		int disposable = id;
+		
+		while (disposable > 0) {
+			disposable--;
+			digits.set(0, digits.get(0)+1);
+			int i = 0;
+			while (digits.get(i) >= 26) {
+				digits.set(i, digits.get(i)-26);
+				if (digits.size() == i+1) {
+					digits.add(0);
+				}
+				digits.set(i+1, digits.get(i+1)+1);
+			}
+		}
+		
+		for (int i = 0; i < digits.size(); i++) {
+			result += letters[digits.get(i)];
+		}
+		
+		return result;
 	}
-    }
+	
+	private void toggleValue() {
+		int x = adyacency.getSelectedColumn();
+		int y = adyacency.getSelectedRow();
+		int curValue = Integer.parseInt((String)adyacency.getValueAt(x,y));
+		adyacency.setValueAt((curValue+1)%2,x,y);
+		adyacency.setValueAt((curValue+1)%2,y,x);
+	}
 
     /**
      * manda la informacion a la ventana principal
      */
-    private void create() {
-	DefaultTableModel model = (DefaultTableModel) citiesTable.getModel();
-
-	try {
-	    City[] cities = new City[model.getRowCount()];
-
-	    for (int i = 0; i < model.getRowCount(); i++) {
-		for (int j = 2; j < i+2; j++) {
-		    citiesTable.setValueAt(citiesTable.getValueAt(i,j), j-2, i+2);
+    private void sendGraph() {
+		DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
+		String[] names = new String[model.getRowCount()];
+		for (int i = 0; i < model.getRowCount(); i++) {
+			names[i] = (String)adyacency.getValueAt(i,0);
 		}
-	    }
-	    for (int i = 0; i < model.getRowCount(); i++) {
-		citiesTable.setValueAt("-1", i, i+2);
-	    }
-
-
-	    for (int i = 0; i < model.getRowCount(); i++) {
-		String name = (String) model.getValueAt(i,0);
-		int airportCost = Integer.parseInt((String)model.getValueAt(i, 1));
-		if (airportCost <= 0) {
-		    throw new Exception();
+		Vertex[] V = Vertex.createVertexArray(names);
+		int[][] C = new int[model.getRowCount()][model.getRowCount()];
+		
+		for (int i = 0; i < model.getRowCount(); i++) {
+			for (int j = 1; j < model.getRowCount()+1; j++) {
+				C[i][j-1] = Integer.parseInt((String)adyacency.getValueAt(i,j));
+			}
 		}
-		int[] costos = new int[model.getColumnCount()];
-		for (int j = 2; j < model.getColumnCount(); j++) {
-		    int value = Integer.parseInt((String)model.getValueAt(i,j));
-		    if (value < 0) {
-			value = -1;
-		    }
-		    costos[j-2] = value;
-		}
-		City newCity = new City(name,airportCost,costos);
-		cities[i] = newCity;
-	    }
-
-	    Window.setCities(cities);
-	}catch (Exception e) {
-	    JOptionPane.showMessageDialog(null,"Digite numeros validos.", "Error", JOptionPane.ERROR_MESSAGE);
-	} finally {
-	    for (int i = 0; i < model.getRowCount(); i++) {
-		for (int j = 2; j < model.getColumnCount(); j++) {
-		    if (i < j-2) {
-			citiesTable.setValueAt("", i, j);
-		    }
-		}
-	    }
-	    for (int i = 0; i < model.getRowCount(); i++) {
-		citiesTable.setValueAt("", i, i+2);
-	    }
-	}
+		
+		Handler.createGraph(V,C);
     }
 	
     private class TableModel extends DefaultTableModel {
 
-	public TableModel(Object[] columnNames, int rowCount) {
-	    super(columnNames, rowCount);
-	}
-
-	@Override
-	public boolean isCellEditable(int row, int col) {
-	    return (col != 0 && row > (col-2));
-	}
-
-	/**
-	 * elimina una columna
-	 * @param col 
-	 */
-	public void removeColumn(int col) {
-	    if (col != getColumnCount()-1) {
-		for (int i = 0; i < this.getRowCount(); i++) {
-		    ((Vector)dataVector.elementAt(i)).setElementAt(((Vector)dataVector.elementAt(i)).elementAt(col+1), col);
+		public TableModel(Object[] columnNames, int rowCount) {
+			super(columnNames, rowCount);
 		}
-	    }
-	    columnIdentifiers.remove(col);
-	    fireTableStructureChanged();
-	}
+
+		@Override
+		public boolean isCellEditable(int row, int col) {
+			return false;
+		}
     }
 }
