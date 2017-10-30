@@ -45,8 +45,6 @@ public abstract class Handler {
 	Graph G = new Graph(V, C, setups);
 	
 	
-//	System.out.println(G.whatIsKFor("11100000"));
-//	System.out.println(G.minimumGraphFor(0));
 	
 	
     }

@@ -69,11 +69,9 @@ public class Graph {
 		for (int j = 0; j < this.allSetups.length; j++) {
 		    GraphSetup other = this.allSetups[j];
 		    if (i != j && !other.isConnected()) {
-//			System.out.println("from "+set+" to "+other+"; d="+set.distanceTo(other));
 			minDist = Integer.min(minDist, set.distanceTo(other));
 		    }
 		}
-		System.out.println(this.allSetups[i]+" d() = " +minDist);
 		set.setK(minDist);
 	    }
 	}
@@ -84,7 +82,6 @@ public class Graph {
 	int index = -1;
 	for (int i = 0; i < this.allSetups.length; i++) {
 	    GraphSetup setup = this.allSetups[i];
-	    System.out.println(setup.toString()+": "+setup.getK());
 	    if (setup.getK() == K) {
 		if (setup.getC() < minimumC) {
 		    minimumC = setup.getC();
@@ -109,7 +106,6 @@ public class Graph {
 	    i++;
 	}
 	currentSetup.setK(connected? -1 : 0);
-	System.out.println(currentSetup+" ? = " +currentSetup.getK());
     }
 
     private boolean findPathsForVertex(int a) {
