@@ -19,7 +19,7 @@ public abstract class Handler {
 	
     public static void init() {
 		new MatrixWindow();
-//		new DisplayWindow();
+		new DisplayWindow();
     }
 	
 	public static void createGraph(Vertex[] V, int[][] C) {
@@ -32,7 +32,7 @@ public abstract class Handler {
 			i++;
 			setups[i] = setups[i-1].next();
 		}
-
+		System.out.println("Creating graph...");
 		G = new Graph(V, C, setups);
 	}
 }

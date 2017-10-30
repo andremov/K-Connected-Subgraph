@@ -125,7 +125,6 @@ public class MatrixWindow extends JFrame {
 		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
 		adyacency.setRowHeight(30);
 		adyacency.getColumnModel().getColumn(0).setPreferredWidth(140);
-		adyacency.getColumnModel().getColumn(1).setPreferredWidth(120);
 		adyacency.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		adyacency.getTableHeader().setReorderingAllowed(false);
 		adyacency.addMouseListener(new MouseListener() {

@@ -17,8 +17,8 @@ public class DisplayWindow extends JFrame {
 
     public static int CANVAS_X = 8;
     public static int CANVAS_Y = 31;
-    public static int WINDOW_X = 800;
-    public static int WINDOW_Y = 800;
+    public static int WINDOW_X = 600;
+    public static int WINDOW_Y = 600;
 
     static Display screen;
 

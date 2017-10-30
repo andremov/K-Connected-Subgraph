@@ -29,9 +29,12 @@ public class Graph {
 		this.allSetups = setups;
 		this.currentSetup = setups[setups.length-1];
 		this.locatingV = 0;
-
+		
+		System.out.print("PROGRESS[");
 		createBasicPaths();
 		solveAll();
+		System.out.println("]");
+		System.out.println("Done!");
     }
     
     public void setup(int id) {
@@ -59,29 +62,32 @@ public class Graph {
     }
     
     private void solveAll() {
+		int cap = this.allSetups.length/10;
 		for (int i = 0; i < this.allSetups.length; i++) {
+			if (i%cap == 0) {
+				System.out.print("|");
+			}
 			if (this.allSetups[i].getK() == -1) {
-			this.setup(i);
-			doBellmanFord();
+				this.setup(i);
+				doBellmanFord();
 			}
 		}
 		for (int i = 0; i < this.allSetups.length; i++) {
 			GraphSetup set = this.allSetups[i];
 			if (set.getK() == -1) {
-			int minDist = N;
-			for (int j = 0; j < this.allSetups.length; j++) {
-				GraphSetup other = this.allSetups[j];
-				if (i != j && !other.isConnected()) {
-				minDist = Integer.min(minDist, set.distanceTo(other));
+				int minDist = N;
+				for (int j = 0; j < this.allSetups.length; j++) {
+					GraphSetup other = this.allSetups[j];
+					if (i != j && !other.isConnected()) {
+					minDist = Integer.min(minDist, set.distanceTo(other));
+					}
 				}
-			}
-			set.setK(minDist);
+				set.setK(minDist);
 			}
 		}
     }
 	
 	public void locateVertex(int x, int y) {
-		System.out.println("locating vertex"+locatingV);
 		V[locatingV].locate(x,y);
 		locatingV = (locatingV+1)%V.length;
 	}
