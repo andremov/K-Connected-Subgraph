@@ -37,7 +37,7 @@ public class MatrixWindow extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("Adyacencia");
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		init();
 
@@ -159,7 +159,6 @@ public class MatrixWindow extends JFrame {
 
 	    Object[] rowData = new Object[adyacency.getColumnCount()];
 	    for (int i = 1; i < rowData.length; i++) {
-			System.out.println(i+" :: "+rowData[i]);
 			rowData[i] = "1";
 	    }
 	    rowData[0] = name;
@@ -197,9 +196,9 @@ public class MatrixWindow extends JFrame {
 	private void toggleValue() {
 		int x = adyacency.getSelectedColumn();
 		int y = adyacency.getSelectedRow();
-		int curValue = Integer.parseInt((String)adyacency.getValueAt(x,y));
-		adyacency.setValueAt((curValue+1)%2,x,y);
-		adyacency.setValueAt((curValue+1)%2,y+1,x);
+		int curValue = Integer.parseInt((String)adyacency.getValueAt(y,x));
+		adyacency.setValueAt(""+(curValue+1)%2,y,x);
+		adyacency.setValueAt((curValue+1)%2,x-1,y+1);
 	}
 
     /**
