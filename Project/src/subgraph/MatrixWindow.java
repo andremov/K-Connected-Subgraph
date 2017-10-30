@@ -60,19 +60,14 @@ public class MatrixWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				toggleValue();
 			}
-
 			@Override
 			public void mousePressed(MouseEvent e) { }
-
 			@Override
 			public void mouseReleased(MouseEvent e) { }
-
 			@Override
 			public void mouseEntered(MouseEvent e) { }
-
 			@Override
 			public void mouseExited(MouseEvent e) { }
-			
 		});
 
 		JScrollPane scroll = new JScrollPane(adyacency);
@@ -216,19 +211,10 @@ public class MatrixWindow extends JFrame {
 		
 		for (int i = 0; i < model.getRowCount(); i++) {
 			for (int j = 0; j < model.getRowCount(); j++) {
-//				try {
-				System.out.println("checking "+i+", "+(j+1));
-				System.out.println("value = "+(String)adyacency.getValueAt(i,j+1));
 				C[i][j] = Integer.parseInt((String)adyacency.getValueAt(i,j+1));
-				System.out.println("C["+i+"]["+j+"] = "+C[i][j]);
-//				} catch (Exception e) {
-//					System.out.println("!!");
-//				}
 			}
 		}
-		System.out.println("got adyacency");
 		
-		System.out.println("sending info...");
 		Handler.createGraph(V,C);
     }
 	

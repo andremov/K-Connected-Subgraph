@@ -32,7 +32,7 @@ public abstract class Handler {
 			i++;
 			setups[i] = setups[i-1].next();
 		}
-		System.out.println("Creating graph...");
+		
 		G = new Graph(V, C, setups);
 	}
 }

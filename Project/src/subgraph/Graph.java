@@ -30,11 +30,8 @@ public class Graph {
 		this.currentSetup = setups[setups.length-1];
 		this.locatingV = 0;
 		
-		System.out.print("PROGRESS[");
 		createBasicPaths();
 		solveAll();
-		System.out.println("]");
-		System.out.println("Done!");
     }
     
     public void setup(int id) {
@@ -62,11 +59,7 @@ public class Graph {
     }
     
     private void solveAll() {
-		int cap = this.allSetups.length/10;
 		for (int i = 0; i < this.allSetups.length; i++) {
-			if (i%cap == 0) {
-				System.out.print("|");
-			}
 			if (this.allSetups[i].getK() == -1) {
 				this.setup(i);
 				doBellmanFord();
