@@ -5,6 +5,7 @@
  */
 package subgraph;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -18,7 +19,7 @@ public abstract class Handler {
     static Scanner in;
             
     public static void init() {
-	int maxVertex = 8;
+	
 	Vertex[] V = Vertex.createVertexArray("A", "B", "C", "D", "E", "F", "G", "H");
 	int[][] C = {
 	    {0, 1, 1, 0, 0, 1, 0, 0}, // 0
@@ -31,25 +32,22 @@ public abstract class Handler {
 	    {0, 0, 0, 1, 1, 1, 1, 0}, // 7
 	};
 	
-	Graph G = new Graph(V, C);
+	int maxVertex = V.length;
+	int max = (int) Math.pow(2,maxVertex);
+	GraphSetup[] setups = new GraphSetup[ max ];
+	setups[0] = new GraphSetup(maxVertex);
+	int i = 0;
+	while (setups[i].canNext()) {
+	    i++;
+	    setups[i] = setups[i-1].next();
+	}
 	
-	G.doBellmanFord();
-	System.out.println("Given graph G is connected? "+G.isConnected());
-	System.out.println("K of graph G: "+getK(G));
+	Graph G = new Graph(V, C, setups);
 	
-    }
-    
-    public static int getK(Graph g) {
-	return getK(g, 0);
-    }
-    
-    public static int getK(Graph g, int i) {
-	g.switchVertexState(i, false);
-	g.doBellmanFord();
-//	System.out.println("Altered graph G with disabled vector "+g.vectorName(i)+" is connected? "+g.isConnected());
-	boolean c = g.isConnected();
-	g.switchVertexState(i, true);
-	int returnK = c? (i+1==g.numVertex()? 0 : getK(g,i+1)) : 1;
-	return returnK;
+	
+//	System.out.println(G.whatIsKFor("11100000"));
+//	System.out.println(G.minimumGraphFor(0));
+	
+	
     }
 }

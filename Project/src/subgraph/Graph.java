@@ -14,21 +14,28 @@ public class Graph {
     private Vertex[] V;
     private int[][] A;
     private int N;
-    private int K;
-    private boolean connected;
     private int[] X;
+    private GraphSetup[] allSetups;
+    private GraphSetup currentSetup;
     
-    public Graph(Vertex[] V, int[][] A) {
+    
+    public Graph(Vertex[] V, int[][] A, GraphSetup[] setups) {
 	this.V = V;
 	this.A = A;
 	this.N = V.length;
 	this.X = new int[N];
+	this.allSetups = setups;
+	this.currentSetup = setups[setups.length-1];
 	
 	createBasicPaths();
+	solveAll();
     }
     
-    public void switchVertexState(int id, boolean state) {
-	V[id].switchState(state);
+    public void setup(int id) {
+	this.currentSetup = allSetups[id];
+	for (int i = 0; i < N; i++) {
+	    V[i].switchState(currentSetup.getVertexState(i));
+	}
 	for (int i = 0; i < N; i++) {
 	    V[i].resetPaths();
 	}
@@ -48,7 +55,47 @@ public class Graph {
 	}
     }
     
-    public void doBellmanFord() {
+    private void solveAll() {
+	for (int i = 0; i < this.allSetups.length; i++) {
+	    if (this.allSetups[i].getK() == -1) {
+		this.setup(i);
+		doBellmanFord();
+	    }
+	}
+	for (int i = 0; i < this.allSetups.length; i++) {
+	    GraphSetup set = this.allSetups[i];
+	    if (set.getK() == -1) {
+		int minDist = N;
+		for (int j = 0; j < this.allSetups.length; j++) {
+		    GraphSetup other = this.allSetups[j];
+		    if (i != j && !other.isConnected()) {
+//			System.out.println("from "+set+" to "+other+"; d="+set.distanceTo(other));
+			minDist = Integer.min(minDist, set.distanceTo(other));
+		    }
+		}
+		System.out.println(this.allSetups[i]+" d() = " +minDist);
+		set.setK(minDist);
+	    }
+	}
+    }
+    
+    public String minimumGraphFor(int K) {
+	int minimumC = N;
+	int index = -1;
+	for (int i = 0; i < this.allSetups.length; i++) {
+	    GraphSetup setup = this.allSetups[i];
+	    System.out.println(setup.toString()+": "+setup.getK());
+	    if (setup.getK() == K) {
+		if (setup.getC() < minimumC) {
+		    minimumC = setup.getC();
+		    index = i;
+		}
+	    }
+	}
+	return this.allSetups[index].toString();
+    }
+    
+    private void doBellmanFord() {
 	int i = 0;
 	while (i < N) {
 	    X[i] = 0;
@@ -56,11 +103,13 @@ public class Graph {
 	}
 	
 	i = 0;
-	this.connected = true;
+	boolean connected = true;
         while (i < N && connected) {
 	    connected = findPathsForVertex(i);
 	    i++;
 	}
+	currentSetup.setK(connected? -1 : 0);
+	System.out.println(currentSetup+" ? = " +currentSetup.getK());
     }
 
     private boolean findPathsForVertex(int a) {
@@ -84,14 +133,16 @@ public class Graph {
 	while (!done) {
 	    if (start.getP()[goalID].getGoal() != goal && goal.isActive()) {
 		int currentPathIndex = -1;
-		int currentLength = N;
+		int currentLength = N+1;
 		for (int j = 0; j < N; j++) {
 		    if (start.getP()[j].getGoal() == V[j]) {
 			Vertex midVertex = start.getP()[j].getGoal();
-			int possibleLength = start.getP()[j].getLength() + midVertex.getP()[goalID].getLength();
-			if (midVertex.getP()[goalID].getGoal() == goal && midVertex.isActive() && possibleLength < currentLength) {
-			    currentPathIndex = j;
-			    currentLength = possibleLength;
+			if (midVertex.isActive() && midVertex.getP()[goalID].getGoal() == goal) {
+			    int possibleLength = start.getP()[j].getLength() + midVertex.getP()[goalID].getLength() - 1;
+			    if (possibleLength < currentLength) {
+				currentPathIndex = j;
+				currentLength = possibleLength;
+			    }
 			}
 		    }
 		}
@@ -136,11 +187,19 @@ public class Graph {
     }
     
     public boolean isConnected() {
-	return connected;
+	return currentSetup.isConnected();
     }
     
     public String vertexName(int i) {
 	return V[i]+"";
+    }
+    
+    public int whatIsKFor(String code) {
+	int i = 0;
+	while (!this.allSetups[i].isSetup(code)) {
+	   i++;
+	}
+	return this.allSetups[i].getK();
     }
     
     public int numVertex() {
