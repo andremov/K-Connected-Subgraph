@@ -169,13 +169,13 @@ public class MatrixWindow extends JFrame {
 
 	    Object[] columnData = new Object[adyacency.getRowCount()];
 	    for (int i = 0; i < columnData.length; i++) {
-			columnData[i] = "1";
+			columnData[i] = "0";
 	    }
 	    model.addColumn(name,columnData);
 
 	    Object[] rowData = new Object[adyacency.getColumnCount()];
 	    for (int i = 1; i < rowData.length; i++) {
-			rowData[i] = "1";
+			rowData[i] = "0";
 	    }
 	    rowData[0] = name;
 	    model.addRow(rowData);

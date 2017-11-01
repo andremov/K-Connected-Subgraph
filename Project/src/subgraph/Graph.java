@@ -91,10 +91,10 @@ public class Graph {
 		for (int i = 0; i < this.allSetups.length; i++) {
 			GraphSetup setup = this.allSetups[i];
 			if (setup.getK() == K) {
-			if (setup.getC() < minimumC) {
-				minimumC = setup.getC();
-				index = i;
-			}
+				if (setup.getC() < minimumC) {
+					minimumC = setup.getC();
+					index = i;
+				}
 			}
 		}
 		
@@ -108,14 +108,8 @@ public class Graph {
 			X[i] = 0;
 			i++;
 		}
-
-		i = 0;
-		boolean connected = true;
-			while (i < N && connected) {
-			connected = findPathsForVertex(i);
-			i++;
-		}
-		currentSetup.setK(connected? -1 : 0);
+		
+		currentSetup.setK(findPathsForVertex(0)? -1 : 0);
     }
 
     private boolean findPathsForVertex(int a) {
@@ -133,7 +127,7 @@ public class Graph {
 		Vertex start = V[a];
 
 		if (!start.isActive()) {
-			return true;
+			return findPathsForVertex(a+1);
 		}
 
 		while (!done) {
@@ -146,8 +140,8 @@ public class Graph {
 				if (midVertex.isActive() && midVertex.getP()[goalID].getGoal() == goal) {
 					int possibleLength = start.getP()[j].getLength() + midVertex.getP()[goalID].getLength() - 1;
 					if (possibleLength < currentLength) {
-					currentPathIndex = j;
-					currentLength = possibleLength;
+						currentPathIndex = j;
+						currentLength = possibleLength;
 					}
 				}
 				}
@@ -167,25 +161,25 @@ public class Graph {
 
 			goalID++;
 			if (goalID == N) {
-			goalID = 0;
-			done = true;
-			for (int k = 0; k < N; k++) {
-				if (!donePaths[k]) {
-				done = false;
-				}
-			}
-
-			if (done) {
-				checkConnection = true;
-			} else {
-				if (changes == 0) {
-				break;
-				}
-				changes = 0;
+				goalID = 0;
+				done = true;
 				for (int k = 0; k < N; k++) {
-				donePaths[k] = false;
+					if (!donePaths[k]) {
+						done = false;
+					}
 				}
-			}
+
+				if (done) {
+					checkConnection = true;
+				} else {
+					if (changes == 0) {
+					break;
+					}
+					changes = 0;
+					for (int k = 0; k < N; k++) {
+					donePaths[k] = false;
+					}
+				}
 			}
 			goal = V[goalID];
 		}
