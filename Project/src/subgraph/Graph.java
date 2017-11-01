@@ -14,7 +14,6 @@ public class Graph {
     private Vertex[] V;
     private int[][] A;
     private int N;
-    private int[] X;
     private GraphSetup[] allSetups;
     private GraphSetup currentSetup;
 	
@@ -25,7 +24,6 @@ public class Graph {
 		this.V = V;
 		this.A = A;
 		this.N = V.length;
-		this.X = new int[N];
 		this.allSetups = setups;
 		this.currentSetup = setups[setups.length-1];
 		this.locatingV = 0;
@@ -62,7 +60,7 @@ public class Graph {
 		for (int i = 0; i < this.allSetups.length; i++) {
 			if (this.allSetups[i].getK() == -1) {
 				this.setup(i);
-				doBellmanFord();
+				currentSetup.setK(findPathsForVertex(0)? -1 : 0);
 			}
 		}
 		for (int i = 0; i < this.allSetups.length; i++) {
@@ -99,18 +97,9 @@ public class Graph {
 		}
 		
 		this.setup(index);
-		doBellmanFord();
-    }
-    
-    private void doBellmanFord() {
-		int i = 0;
-		while (i < N) {
-			X[i] = 0;
-			i++;
-		}
-		
 		currentSetup.setK(findPathsForVertex(0)? -1 : 0);
     }
+    
 
     private boolean findPathsForVertex(int a) {
 		boolean checkConnection = false;
@@ -150,7 +139,6 @@ public class Graph {
 			if (currentPathIndex != -1) {
 				start.getP()[goalID].add(start.getP()[currentPathIndex]);
 				start.getP()[goalID].add(start.getP()[currentPathIndex].getGoal().getP()[goalID]);
-				X[currentPathIndex]++;
 				donePaths[goalID] = true;
 				changes++;
 			}
