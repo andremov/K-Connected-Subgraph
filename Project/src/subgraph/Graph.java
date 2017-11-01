@@ -97,9 +97,7 @@ public class Graph {
 		}
 		
 		this.setup(index);
-		currentSetup.setK(findPathsForVertex(0)? -1 : 0);
     }
-    
 
     private boolean findPathsForVertex(int a) {
 		boolean checkConnection = false;
