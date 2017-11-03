@@ -130,7 +130,8 @@ public class MatrixWindow extends JFrame {
     }
     
     public void requestK() {
-	Handler.G.minimumGraphFor(Integer.parseInt(fieldK.getText()));
+//	Handler.G.minimumGraphFor(Integer.parseInt(fieldK.getText()));
+	Handler.G.maximumGraphFor(Integer.parseInt(fieldK.getText()));
     }
     
     

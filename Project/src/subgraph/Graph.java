@@ -97,6 +97,27 @@ public class Graph {
 		}
 		if (index != -1) {
 		    this.setup(index);
+		} else {
+		    this.setup(0);
+		}
+    }
+    
+    public void maximumGraphFor(int K) {
+		int maximumC = -1;
+		int index = -1;
+		for (int i = 0; i < this.allSetups.length; i++) {
+			GraphSetup setup = this.allSetups[i];
+			if (setup.getK() == K) {
+				if (setup.getC() > maximumC) {
+					maximumC = setup.getC();
+					index = i;
+				}
+			}
+		}
+		if (index != -1) {
+		    this.setup(index);
+		} else {
+		    this.setup(0);
 		}
     }
 
