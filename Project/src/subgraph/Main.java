@@ -5,6 +5,9 @@
  */
 package subgraph;
 
+import java.io.File;
+import java.nio.file.Files;
+
 /**
  *
  * @author Andres
@@ -16,6 +19,26 @@ public class Main {
      */
     public static void main(String[] args) {
 	Handler.init();
+        
+        try {
+            File archivo = new File("adyacencia.txt");
+            
+            boolean created = false;
+            Vertex[] V = null;
+            int[][] C = null;
+            for (int i = 0; i < Files.readAllLines(archivo.toPath()).size(); i++) {
+                String[] line = Files.readAllLines(archivo.toPath()).get(i).split(" ");
+                if (!created) {
+                    created = true;
+                    V = Vertex.createVertexArray(line.length);
+                    C = new int[line.length][line.length];
+                }
+                for (int j = 0; j < line.length; j++) {
+                    C[j][i] = Integer.parseInt(line[j]);
+                }
+            }
+            Handler.createGraph(V,C);
+        } catch (Exception ex) { }
     }
 	
 }

@@ -32,9 +32,8 @@ public abstract class Handler {
 			i++;
 			setups[i] = setups[i-1].next();
 		}
-		double startTime = System.nanoTime();
+                System.out.println("Creando grafo...");
 		G = new Graph(V, C, setups);
-		double endTime = System.nanoTime();
-		   System.out.println((endTime-startTime)*0.001);
+                
 	}
 }

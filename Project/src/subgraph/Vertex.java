@@ -5,6 +5,8 @@
  */
 package subgraph;
 
+import java.util.ArrayList;
+
 
 /**
  *
@@ -29,6 +31,42 @@ public class Vertex {
 			created[i] = new Vertex(names[i],names.length);
 		}
 		return created;
+    }
+    
+    private static String generateName(int id) {
+        String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+                                                "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        String result = "";
+        ArrayList<Integer> digits = new ArrayList<>();
+        digits.add(0);
+        int disposable = id;
+
+        while (disposable > 0) {
+            disposable--;
+            digits.set(0, digits.get(0)+1);
+            int i = 0;
+            while (digits.get(i) >= 26) {
+                digits.set(i, digits.get(i)-26);
+                if (digits.size() == i+1) {
+                    digits.add(0);
+                }
+                digits.set(i+1, digits.get(i+1)+1);
+            }
+        }
+
+        for (int i = 0; i < digits.size(); i++) {
+            result += letters[digits.get(i)];
+        }
+
+        return result;
+    }
+    
+    public static Vertex[] createVertexArray(int length) {
+            Vertex[] created = new Vertex[length];
+            for (int i = 0; i < length; i++) {
+                created[i] = new Vertex(generateName(i), length);
+            }
+            return created;
     }
     
     public Vertex(String name, int maxVertex) {

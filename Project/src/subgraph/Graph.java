@@ -138,7 +138,7 @@ public class Graph {
 			return findPathsForVertex(a+1);
 
 		while (!done) {
-			donePaths[goalID] = true;
+//			donePaths[goalID] = true;
 			if (start.getP()[goalID].getGoal() != goal && goal.isActive()) {
 				int currentPathIndex = -1;
 				int currentLength = N+1;
@@ -161,8 +161,10 @@ public class Graph {
 					donePaths[goalID] = true;
 					changes++;
 				}
-			}
-}
+			} else {
+                            donePaths[goalID] = true;
+                        }
+
 			goalID++;
 			if (goalID == N) {
 				goalID = 0;
