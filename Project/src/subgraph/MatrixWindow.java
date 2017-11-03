@@ -137,26 +137,7 @@ public class MatrixWindow extends JFrame {
 	
 	private void reset() {
 		didChanges = true;
-		adyacency = new JTable();
 		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
-		adyacency.setRowHeight(30);
-		adyacency.getColumnModel().getColumn(0).setPreferredWidth(140);
-		adyacency.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		adyacency.getTableHeader().setReorderingAllowed(false);
-		adyacency.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				toggleValue();
-			}
-			@Override
-			public void mousePressed(MouseEvent e) { }
-			@Override
-			public void mouseReleased(MouseEvent e) { }
-			@Override
-			public void mouseEntered(MouseEvent e) { }
-			@Override
-			public void mouseExited(MouseEvent e) { }
-		});
 	}
 	
     /**
