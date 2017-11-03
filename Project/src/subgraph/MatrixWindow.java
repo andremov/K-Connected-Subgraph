@@ -24,7 +24,118 @@ import javax.swing.table.DefaultTableModel;
  * @author Andres
  */
 public class MatrixWindow extends JFrame {
+    
+    JButton matOneBtn;
+    JButton matTwoBtn;
+    JLabel requestK;
+    JTextField fieldK;
+    JButton sendKBtn;
+    
+    public MatrixWindow() {
+		setLayout(null);
+		setSize(200,280);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setTitle("Adyacencia");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		init();
+
+		setVisible(true);
+    }
+    
+    private void init() {
+
+	matOneBtn = new JButton("Grafo uno");
+	matOneBtn.setSize(175, 50);
+	matOneBtn.setLocation(10, 10);
+	matOneBtn.setFocusable(false);
+	matOneBtn.addActionListener(new ActionListener( ) {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		sendOne();
+	    }
+	});
+	add(matOneBtn);
+
+	matTwoBtn = new JButton("Grafo dos");
+	matTwoBtn.setSize(175, 50);
+	matTwoBtn.setLocation(10, 80);
+	matTwoBtn.setFocusable(false);
+	matTwoBtn.addActionListener(new ActionListener( ) {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		sendTwo();
+	    }
+	});
+	add(matTwoBtn);
 	
+	requestK = new JLabel("K:");
+	requestK.setSize(50, 30);
+	requestK.setLocation(10, 140);
+	requestK.setFocusable(false);
+	add(requestK);
+
+	fieldK = new JTextField();
+	fieldK.setSize(90, 30);
+	fieldK.setLocation(30, 140);
+	add(fieldK);
+
+	sendKBtn = new JButton("Resolver K");
+	sendKBtn.setSize(175, 50);
+	sendKBtn.setLocation(10, 180);
+	sendKBtn.setFocusable(false);
+	sendKBtn.addActionListener(new ActionListener( ) {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		requestK();
+	    }
+	});
+	add(sendKBtn);
+    }
+    
+    
+    public void sendOne() {
+	Vertex[] V = Vertex.createVertexArray("A", "B", "C", "D", "E", "F", "G", "H");
+	int[][] C = {
+	    {0, 1, 1, 0, 0, 1, 0, 0},
+	    {1, 0, 1, 0, 0, 0, 0, 0},
+	    {1, 1, 0, 0, 0, 0, 0, 0},
+	    {0, 0, 0, 0, 1, 1, 0, 1},
+	    {0, 0, 0, 1, 0, 0, 1, 1},
+	    {1, 0, 0, 1, 0, 0, 0, 1},
+	    {0, 0, 0, 0, 1, 0, 0, 1},
+	    {0, 0, 0, 1, 1, 1, 1, 0},
+	};
+
+	Handler.createGraph(V,C);
+    }
+    
+    public void sendTwo() {
+	Vertex[] V = Vertex.createVertexArray("A", "B", "C", "D", "E", "F", "G", "H", "I");
+	int[][] C = {
+	//   A  B  C  D  E  F  G  H  I
+	    {0, 1, 1, 1, 0, 1, 0, 0, 0}, // A
+	    {1, 0, 1, 1, 0, 1, 0, 0, 0}, // B
+	    {1, 1, 0, 1, 0, 1, 0, 0, 0}, // C
+	    {1, 1, 1, 0, 1, 1, 1, 0, 0}, // D
+	    {0, 0, 0, 1, 0, 1, 1, 0, 0}, // E
+	    {1, 1, 1, 1, 1, 0, 1, 1, 0}, // F
+	    {0, 0, 0, 1, 1, 1, 0, 1, 1}, // G
+	    {0, 0, 0, 0, 0, 1, 1, 0, 1}, // H
+	    {0, 0, 0, 0, 0, 0, 1, 1, 0}, // I
+	};
+
+	Handler.createGraph(V,C);
+    }
+    
+    public void requestK() {
+	Handler.G.minimumGraphFor(Integer.parseInt(fieldK.getText()));
+    }
+    
+    
+    
+	/*
     JButton processBtn;
 
     JButton addVertexBtn;
@@ -50,9 +161,6 @@ public class MatrixWindow extends JFrame {
 		setVisible(true);
     }
 	
-    /**
-     * inicializa la interfaz
-     */
     private void init() {
 
 		didChanges = false;
@@ -140,9 +248,6 @@ public class MatrixWindow extends JFrame {
 		adyacency.setModel(new TableModel(new String[] {"Nombre"},0));
 	}
 	
-    /**
-     * agrega una ciudad a la tabla
-     */
     private void addVertex() {
 		didChanges = true;
 		String name = generateName(adyacency.getRowCount());
@@ -198,10 +303,7 @@ public class MatrixWindow extends JFrame {
 		adyacency.setValueAt(""+(curValue+1)%2,y,x);
 		adyacency.setValueAt(""+(curValue+1)%2,x-1,y+1);
 	}
-
-    /**
-     * manda la informacion a la ventana principal
-     */
+    
     private void sendGraph() {
 		if (didChanges) {
 			DefaultTableModel model = (DefaultTableModel) adyacency.getModel();
@@ -237,4 +339,5 @@ public class MatrixWindow extends JFrame {
 			return false;
 		}
     }
+    */
 }

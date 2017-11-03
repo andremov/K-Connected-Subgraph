@@ -22,8 +22,8 @@ public class Vertex {
 	private int x;
 	private int y;
 
-    public static Vertex[] createVertexArray(String[] names) {
-//    public static Vertex[] createVertexArray(String... names) {
+//    public static Vertex[] createVertexArray(String[] names) {
+    public static Vertex[] createVertexArray(String... names) {
 		Vertex[] created = new Vertex[names.length];
 		for (int i = 0; i < names.length; i++) {
 			created[i] = new Vertex(names[i],names.length);

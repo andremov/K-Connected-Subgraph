@@ -95,8 +95,9 @@ public class Graph {
 				}
 			}
 		}
-		
-		this.setup(index);
+		if (index != -1) {
+		    this.setup(index);
+		}
     }
 
     private boolean findPathsForVertex(int a) {
