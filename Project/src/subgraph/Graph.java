@@ -115,58 +115,54 @@ public class Graph {
 			}
 		}
 		if (index != -1) {
-		    this.setup(index);
+			this.setup(index);
 		} else {
-		    this.setup(0);
+			this.setup(0);
 		}
     }
 
     private boolean findPathsForVertex(int a) {
 		boolean checkConnection = false;
-
 		boolean[] donePaths = new boolean[N];
-		for (int j = 0; j < N; j++) {
+		
+		for (int j = 0; j < N; j++)
 			donePaths[j] = false;
-		}
-
+		
 		boolean done = false;
 		int goalID = 0;
 		int changes = 0;
 		Vertex goal = V[goalID];
 		Vertex start = V[a];
 
-		if (!start.isActive()) {
+		if (!start.isActive())
 			return findPathsForVertex(a+1);
-		}
 
 		while (!done) {
+			donePaths[goalID] = true;
 			if (start.getP()[goalID].getGoal() != goal && goal.isActive()) {
-			int currentPathIndex = -1;
-			int currentLength = N+1;
-			for (int j = 0; j < N; j++) {
-				if (start.getP()[j].getGoal() == V[j]) {
-				Vertex midVertex = start.getP()[j].getGoal();
-				if (midVertex.isActive() && midVertex.getP()[goalID].getGoal() == goal) {
-					int possibleLength = start.getP()[j].getLength() + midVertex.getP()[goalID].getLength() - 1;
-					if (possibleLength < currentLength) {
-						currentPathIndex = j;
-						currentLength = possibleLength;
+				int currentPathIndex = -1;
+				int currentLength = N+1;
+				for (int j = 0; j < N; j++) {
+					if (start.getP()[j].getGoal() == V[j]) {
+						Vertex midVertex = start.getP()[j].getGoal();
+						if (midVertex.isActive() && midVertex.getP()[goalID].getGoal() == goal) {
+							int possibleLength = start.getP()[j].getLength() + midVertex.getP()[goalID].getLength() - 1;
+							if (possibleLength < currentLength) {
+								currentPathIndex = j;
+								currentLength = possibleLength;
+							}
+						}
 					}
 				}
+
+				if (currentPathIndex != -1) {
+					start.getP()[goalID].add(start.getP()[currentPathIndex]);
+					start.getP()[goalID].add(start.getP()[currentPathIndex].getGoal().getP()[goalID]);
+					donePaths[goalID] = true;
+					changes++;
 				}
 			}
-
-			if (currentPathIndex != -1) {
-				start.getP()[goalID].add(start.getP()[currentPathIndex]);
-				start.getP()[goalID].add(start.getP()[currentPathIndex].getGoal().getP()[goalID]);
-				donePaths[goalID] = true;
-				changes++;
-			}
-
-			} else {
-			donePaths[goalID] = true;
-			}
-
+}
 			goalID++;
 			if (goalID == N) {
 				goalID = 0;
@@ -181,11 +177,11 @@ public class Graph {
 					checkConnection = true;
 				} else {
 					if (changes == 0) {
-					break;
+						break;
 					}
 					changes = 0;
 					for (int k = 0; k < N; k++) {
-					donePaths[k] = false;
+						donePaths[k] = false;
 					}
 				}
 			}
